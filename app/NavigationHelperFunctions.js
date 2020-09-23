@@ -22,3 +22,21 @@ const loginStack = {
     },
   },
 };
+
+const registerStack = {
+  root: {
+    component: {
+      id: 'RegisterScreen',
+      name: 'RegisterScreen',
+      options: {
+        topBar: {
+          visible: false,
+        },
+        statusBar: {
+          backgroundColor: SecondaryColor,
+          style: DarkMode ? 'light' : 'dark',
+        },
+      },
+    },
+  },
+};
