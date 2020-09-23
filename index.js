@@ -1,9 +1,13 @@
-/**
- * @format
- */
+import {Navigation} from 'react-native-navigation';
+import {SetLoginRoot} from './app/NavigationHelperFunctions';
+import {SecondaryColor} from './app/AppConfig';
+import {gestureHandlerRootHOC} from 'react-native-gesture-handler';
+import LoginScreen from './app/screens/LoginScreen';
 
-import {AppRegistry} from 'react-native';
-import App from './App';
-import {name as appName} from './app.json';
+Navigation.registerComponent('LoginScreen', () =>
+  gestureHandlerRootHOC(LoginScreen),
+);
 
-AppRegistry.registerComponent(appName, () => App);
+Navigation.events().registerAppLaunchedListener(() => {
+  SetLoginRoot();
+});
