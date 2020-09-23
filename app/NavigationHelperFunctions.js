@@ -23,6 +23,10 @@ const loginStack = {
   },
 };
 
+export const SetRegisterRoot = () => {
+  Navigation.setRoot(registerStack);
+};
+
 const registerStack = {
   root: {
     component: {
