@@ -1,6 +1,10 @@
 import {DarkMode, PrimaryColor, SecondaryColor} from './AppConfig';
 import {Navigation} from 'react-native-navigation';
 
+export const SetLoginRoot = () => {
+  Navigation.setRoot(loginStack);
+};
+
 const loginStack = {
   root: {
     component: {
