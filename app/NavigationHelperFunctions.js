@@ -45,6 +45,10 @@ const registerStack = {
   },
 };
 
+export const MoveBackOneScreen = (stackId) => {
+  Navigation.pop(stackId).catch((reason) => console.log(reason));
+};
+
 export const UpdateStatusBarColor = (
   screenId,
   backgroundColor,
