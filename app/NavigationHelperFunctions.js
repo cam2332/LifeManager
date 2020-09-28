@@ -44,3 +44,16 @@ const registerStack = {
     },
   },
 };
+
+export const UpdateStatusBarColor = (
+  screenId,
+  backgroundColor,
+  style = DarkMode ? 'light' : 'dark',
+) => {
+  Navigation.mergeOptions(screenId, {
+    statusBar: {
+      backgroundColor: backgroundColor,
+      style: style,
+    },
+  });
+};
