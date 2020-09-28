@@ -45,6 +45,16 @@ const registerStack = {
   },
 };
 
+export const OpenLeftSideMenu = () => {
+  Navigation.mergeOptions('LeftSideMenu', {
+    sideMenu: {
+      left: {
+        visible: true,
+      },
+    },
+  });
+};
+
 export const MoveBackOneScreen = (stackId) => {
   Navigation.pop(stackId).catch((reason) => console.log(reason));
 };
