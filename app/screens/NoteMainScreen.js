@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {
   View,
   RefreshControl,
+  TouchableOpacity,
   FlatList,
   StyleSheet,
 } from 'react-native';
@@ -14,6 +15,7 @@ import {
   SecondaryThreeFourthColor,
 } from '../AppConfig';
 import ScreenHeader from '../components/ScreenHeader';
+import Icon from 'react-native-vector-icons/Ionicons';
 import {UpdateStatusBarColor} from '../NavigationHelperFunctions';
 import NoteCard from '../components/NoteCard';
 
@@ -73,6 +75,8 @@ const NoteMainScreen = () => {
     setSelectedNoteList([]);
   };
 
+  const AddNote = () => {};
+
   const DeleteSelectedNotes = () => {
   };
 
@@ -127,11 +131,33 @@ const NoteMainScreen = () => {
           )}
         />
       </View>
+      <TouchableOpacity
+        style={styles.floatingButton}
+        onPress={() => (selectMode ? DeleteSelectedNotes() : AddNote())}>
+        <Icon
+          name={selectMode ? 'trash-sharp' : 'add-sharp'}
+          size={30}
+          color={DarkMode ? SecondaryNegativeColor : SecondaryColor}
+        />
+      </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  floatingButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 60,
+    height: 60,
+    position: 'absolute',
+    bottom: 17,
+    right: 17,
+    backgroundColor: DarkMode ? PrimaryDarkColor : PrimaryColor,
+    borderColor: SecondaryColor,
+    borderWidth: 2,
+    borderRadius: 30,
+  },
   listContainer: {
     flex: 1,
     marginTop: 16,
