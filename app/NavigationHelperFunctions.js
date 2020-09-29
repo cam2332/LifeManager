@@ -51,6 +51,12 @@ const registerStack = {
   },
 };
 
+export const SetNoteRoot = () => {
+  if (currentScreenId !== noteScreenId) {
+    Navigation.setRoot(noteStack);
+  }
+};
+
 const noteStack = {
   root: {
     sideMenu: {
