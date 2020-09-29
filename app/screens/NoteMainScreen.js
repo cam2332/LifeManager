@@ -11,7 +11,9 @@ import {
   PrimaryDarkColor,
   SecondaryColor,
   SecondaryNegativeColor,
+  SecondaryThreeFourthColor,
 } from '../AppConfig';
+import ScreenHeader from '../components/ScreenHeader';
 import {UpdateStatusBarColor} from '../NavigationHelperFunctions';
 import NoteCard from '../components/NoteCard';
 const NoteMainScreen = () => {
@@ -37,9 +39,30 @@ const NoteMainScreen = () => {
   const onRefresh = () => {
     setIsFetching(true);
     UpdateNoteList();
+
+  const UpdateListFromSearch = (text) => {
+  };
+
+  const OnChangeSearchText = (newValue) => {
+    UpdateListFromSearch(newValue);
+  };
+
   };
   return (
     <View style={styles.mainContainer}>
+      <ScreenHeader
+        title={selectMode ? selectedNoteList.length.toString() : 'Notatki'}
+        textColor={DarkMode ? SecondaryNegativeColor : PrimaryColor}
+        iconsColor={DarkMode ? SecondaryNegativeColor : PrimaryColor}
+        backgroundColor={DarkMode ? SecondaryThreeFourthColor : SecondaryColor}
+        borderColor={DarkMode ? SecondaryThreeFourthColor : PrimaryColor}
+        sideMenuButtonVisible={true}
+        searchButtonVisible={true}
+        OnChangeSearchText={(text) => OnChangeSearchText(text)}
+        searchBarTextPlaceholder={'Wpisz nazwę notatki'}
+        OnEndTypingSearch={(text) => UpdateListFromSearch(text)}
+        OnCancelTypingSearch={UpdateNoteList}
+      />
       <View style={styles.listContainer}>
         <FlatList
           data={noteList}
