@@ -36,11 +36,11 @@ const ScreenHeader = (props) => {
   };
 
   const OnPressBackButton = () => {
-    MoveBackOneScreen();
+    MoveBackOneScreen(props.stackId);
+    props.OnPressBack && props.OnPressBack();
   };
 
   const OnPressSearchButton = async () => {
-    console.log('test');
     setSearchBarActive(true);
     await setTimeout(() => {
       textInputRef.current.focus();
@@ -54,7 +54,6 @@ const ScreenHeader = (props) => {
   };
 
   const OnEndTypingSearch = (text) => {
-    console.log('end', text);
     setSearchBarActive(false);
     props.OnEndTypingSearch(text);
     setInputText('');
@@ -83,7 +82,7 @@ const ScreenHeader = (props) => {
       onPress={OnPressBackButton}>
       <Icon
         style={styles.backButtonIcon}
-        name="md-arrow-back"
+        name="arrow-back-sharp"
         color={iconColor}
         size={31}
       />
@@ -146,7 +145,7 @@ const ScreenHeader = (props) => {
         onPress={() => OnCancelTypingSearch()}>
         <Icon
           style={styles.searchBarCancelButtonIcon}
-          name="md-close"
+          name="close-sharp"
           color="#888"
           size={21}
         />
