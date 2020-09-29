@@ -18,6 +18,7 @@ import ScreenHeader from '../components/ScreenHeader';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {UpdateStatusBarColor} from '../NavigationHelperFunctions';
 import NoteCard from '../components/NoteCard';
+import * as NoteApi from '../services/NoteApi';
 
 const NoteMainScreen = () => {
   const [noteList, setNoteList] = useState([]);
@@ -50,6 +51,11 @@ const NoteMainScreen = () => {
   };
 
   const UpdateListFromSearch = (text) => {
+    NoteApi.GetAllNotesByTitle(text).then((notes) => {
+      setNoteList([]);
+      setNoteList(notes);
+      setIsFetching(false);
+    });
   };
 
   const OnChangeSearchText = (newValue) => {
@@ -78,6 +84,15 @@ const NoteMainScreen = () => {
   const AddNote = () => {};
 
   const DeleteSelectedNotes = () => {
+    setIsDeleting(true);
+    NoteApi.DeleteNotes(selectedNoteList).then((success) => {
+      setNoteList(
+        noteList.filter((note) => !selectedNoteList.includes(note.id)),
+      );
+      setSelectMode(false);
+      setSelectedNoteList([]);
+      setIsDeleting(false);
+    });
   };
 
   return (
