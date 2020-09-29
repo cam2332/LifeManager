@@ -1,3 +1,6 @@
+export function UniqueId() {
+  return RandomString(24);
+}
 
 export function RandomString(length) {
   const chars =
