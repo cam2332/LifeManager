@@ -188,7 +188,6 @@ const ScreenHeader = (props) => {
             props.leftCustomButtonVisible &&
             leftCustomButton(props.leftCustomButton.iconName, iconsColor)}
           {title(
-            props.isTitleEditable,
             props.titleFontSize,
             props.titleAlignment,
             textColor,
