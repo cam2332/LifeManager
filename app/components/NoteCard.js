@@ -1,23 +1,50 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {TouchableOpacity, View, Text, StyleSheet} from 'react-native';
 import {SecondaryNegativeColor, SecondaryHalfColor} from '../AppConfig';
 
 const NoteCard = (props) => {
+  const defaultBackgroundColor =
+    props.note.color || props.backgroundColor || SecondaryHalfColor;
+  const defaultTitleColor = props.titleColor || SecondaryNegativeColor;
+  const defaultTextColor = props.textColor || SecondaryNegativeColor;
+  const defaultBorderColor =
+    props.borderColor || defaultBackgroundColor || SecondaryHalfColor;
+
   const [backgroundColor, setBackgroundColor] = useState(
-    props.note.color || props.backgroundColor || SecondaryHalfColor,
+    props.selected ? defaultTitleColor : defaultBackgroundColor,
   );
   const [borderColor, setBorderColor] = useState(
-    props.borderColor || backgroundColor || SecondaryHalfColor,
+    props.selected ? defaultTitleColor : defaultBorderColor,
   );
   const [titleColor, setTitleColor] = useState(
-    props.titleColor || SecondaryNegativeColor,
+    props.selected ? defaultBackgroundColor : defaultTitleColor,
   );
   const [textColor, setTextColor] = useState(
-    props.textColor || SecondaryNegativeColor,
+    props.selected ? defaultBackgroundColor : defaultTextColor,
   );
 
+  useEffect(() => {
+    if (props.selected) {
+      setBackgroundColor(defaultTitleColor);
+      setBorderColor(defaultBorderColor);
+      setTitleColor(defaultBackgroundColor);
+      setTextColor(defaultBackgroundColor);
+    } else {
+      setBackgroundColor(defaultBackgroundColor);
+      setBorderColor(defaultBorderColor);
+      setTitleColor(defaultTitleColor);
+      setTextColor(defaultTextColor);
+    }
+  }, [
+    props.selected,
+    defaultTitleColor,
+    defaultBackgroundColor,
+    defaultBorderColor,
+    defaultTextColor,
+  ]);
   return (
     <TouchableOpacity
+      activeOpacity={0.7}
       onPress={props.OnPressCard}
       onLongPress={props.OnLongPressCard}
       style={[
