@@ -1,6 +1,7 @@
 import {DarkMode, PrimaryColor, SecondaryColor} from './AppConfig';
 import {Navigation} from 'react-native-navigation';
 
+export const noteStackId = 'NoteStack';
 const noteScreenId = 'NoteMainScreen';
 export let currentScreenId = '';
 export function SetCurrentScreenId(id) {
@@ -134,6 +135,21 @@ export const UpdateStatusBarColor = (
     statusBar: {
       backgroundColor: backgroundColor,
       style: style,
+    },
+  });
+};
+
+export const NavigateToNoteEditScreen = (props) => {
+  Navigation.push(noteStackId, {
+    component: {
+      id: 'NoteEditScreen',
+      name: 'NoteEditScreen',
+      passProps: props,
+      options: {
+        topBar: {
+          visible: false,
+        },
+      },
     },
   });
 };
