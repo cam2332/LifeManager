@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {UpdateStatusBarColor} from '../NavigationHelperFunctions';
+import {SetNoteRoot, UpdateStatusBarColor} from '../NavigationHelperFunctions';
 import {
   DarkMode,
   PrimaryColor,
@@ -11,9 +11,19 @@ import {
 } from '../AppConfig';
 
 const mainOptions = [
+  {
+    text: 'Notatki',
+    iconName: 'create-sharp',
+    stack: OpenNoteMainScreen,
+  },
 ];
 const options = [
 ];
+
+const OpenNoteMainScreen = () => {
+  SetNoteRoot;
+};
+
 const LeftSideMenu = () => {
   const [textSize, setTextSize] = useState(15);
   const [iconSize, setIconSize] = useState(29);
