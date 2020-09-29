@@ -266,7 +266,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   searchBarMainContainer: {
-    flex: 1,
+    flex: 0.985,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
