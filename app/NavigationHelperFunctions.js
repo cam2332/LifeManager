@@ -45,6 +45,60 @@ const registerStack = {
   },
 };
 
+const noteStack = {
+  root: {
+    sideMenu: {
+      left: {
+        component: {
+          id: 'LeftSideMenu',
+          name: 'LeftSideMenu',
+        },
+      },
+      center: {
+        stack: {
+          id: 'NoteStack',
+          children: [
+            {
+              component: {
+                id: 'NoteMainScreen',
+                name: 'NoteMainScreen',
+                options: {
+                  topBar: {
+                    visible: false,
+                  },
+                },
+              },
+            },
+          ],
+          options: {
+            statusBar: {
+              backgroundColor: PrimaryColor,
+              style: DarkMode ? 'light' : 'dark',
+            },
+          },
+        },
+      },
+      right: {
+        component: {
+          id: 'LeftSideMenu',
+          name: 'LeftSideMenu',
+        },
+      },
+      options: {
+        sideMenu: {
+          left: {
+            width: '320',
+          },
+        },
+        statusBar: {
+          backgroundColor: PrimaryColor,
+          style: DarkMode ? 'light' : 'dark',
+        },
+      },
+    },
+  },
+};
+
 export const OpenLeftSideMenu = () => {
   Navigation.mergeOptions('LeftSideMenu', {
     sideMenu: {
