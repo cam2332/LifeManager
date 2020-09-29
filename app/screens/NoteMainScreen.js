@@ -102,7 +102,7 @@ const NoteMainScreen = () => {
           refreshControl={
             <RefreshControl refreshing={isFetching} onRefresh={onRefresh} />
           }
-          keyExtractor={(index) => index.toString()}
+          keyExtractor={(item, index) => index.toString()}
           renderItem={({item}) => (
             <NoteCard
               note={item}
