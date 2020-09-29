@@ -16,11 +16,11 @@ import {
 } from '../AppConfig';
 import ScreenHeader from '../components/ScreenHeader';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {UpdateStatusBarColor} from '../NavigationHelperFunctions';
+import * as NavigationHelperFunctions from '../NavigationHelperFunctions';
 import NoteCard from '../components/NoteCard';
 import * as NoteApi from '../services/NoteApi';
 
-const NoteMainScreen = () => {
+const NoteMainScreen = (props) => {
   const [noteList, setNoteList] = useState([]);
   const [selectedNoteList, setSelectedNoteList] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
@@ -28,7 +28,11 @@ const NoteMainScreen = () => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    UpdateStatusBarColor('NoteMainScreen', SecondaryColor);
+    NavigationHelperFunctions.UpdateStatusBarColor(
+      'NoteMainScreen',
+      SecondaryColor,
+    );
+    NavigationHelperFunctions.SetCurrentScreenId(props.componentId);
   });
 
   useEffect(() => {

@@ -1,6 +1,12 @@
 import {DarkMode, PrimaryColor, SecondaryColor} from './AppConfig';
 import {Navigation} from 'react-native-navigation';
 
+const noteScreenId = 'NoteMainScreen';
+export let currentScreenId = '';
+export function SetCurrentScreenId(id) {
+  currentScreenId = id;
+}
+
 export const SetLoginRoot = () => {
   Navigation.setRoot(loginStack);
 };
