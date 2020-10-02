@@ -39,7 +39,6 @@ const NoteMainScreen = (props) => {
     UpdateNoteList();
   }, []);
 
-
   const UpdateNoteList = () => {
     NoteApi.GetAllNotes().then((notes) => {
       setNoteList(notes);
@@ -99,6 +98,17 @@ const NoteMainScreen = (props) => {
     });
   };
 
+  const OnDeleteNote = (noteId) => {
+    setNoteList(noteList.filter((note) => note.id !== noteId));
+  };
+
+  const OpenEditNoteScreen = (note) => {
+    NavigationHelperFunctions.NavigateToNoteEditScreen({
+      note,
+      OnDeleteNote: (noteId) => OnDeleteNote(noteId),
+    });
+  };
+
   return (
     <View style={styles.mainContainer}>
       <ScreenHeader
@@ -144,6 +154,7 @@ const NoteMainScreen = (props) => {
                     item.id,
                     !selectedNoteList.includes(item.id),
                   );
+                !isDeleting && !selectMode && OpenEditNoteScreen(item);
               }}
               selected={selectedNoteList.includes(item.id)}
             />
@@ -173,7 +184,7 @@ const styles = StyleSheet.create({
     bottom: 17,
     right: 17,
     backgroundColor: DarkMode ? PrimaryDarkColor : PrimaryColor,
-    borderColor: SecondaryColor,
+    borderColor: DarkMode ? SecondaryNegativeColor : SecondaryColor,
     borderWidth: 2,
     borderRadius: 30,
   },

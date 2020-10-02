@@ -14,10 +14,13 @@ import {
   SecondaryColor,
   SecondaryHalfColor,
   SecondaryNegativeColor,
+  DialogBackgroundColor,
 } from '../AppConfig';
 import * as NavigationHelperFunctions from '../NavigationHelperFunctions';
 import * as LocalizationHelperFunctions from '../LocalizationHelperFunctions';
 import ScreenHeader from '../components/ScreenHeader';
+import ConfirmDialog from '../components/dialogs/ConfirmDialog';
+import * as NoteApi from '../services/NoteApi';
 
 const NoteEditScreen = (props) => {
   const [title, setTitle] = useState(props.note.title);
@@ -37,9 +40,13 @@ const NoteEditScreen = (props) => {
   useEffect(() => {
     NavigationHelperFunctions.UpdateStatusBarColor(
       'NoteEditScreen',
-      SecondaryColor,
+      deleteNoteConfirmDialogVisible
+        ? DarkMode
+          ? SecondaryColor
+          : DialogBackgroundColor
+        : SecondaryColor,
     );
-  });
+  }, [deleteNoteConfirmDialogVisible]);
 
   const OnPressBack = () => {};
   const TitleInputEndEditing = () => {
@@ -58,6 +65,19 @@ const NoteEditScreen = (props) => {
   };
   const DeleteNote = () => {
     setDeleteNoteConfirmDialogVisible(true);
+  };
+  const ConfirmDeleteNote = () => {
+    setDeleteNoteConfirmDialogVisible(false);
+    NoteApi.DeleteNote(props.note.id).then((success) => {
+      if (success) {
+        NavigationHelperFunctions.MoveBackOneScreen(
+          NavigationHelperFunctions.noteStackId,
+        );
+        props.OnDeleteNote(props.note.id);
+      } else {
+        // TODO: make message with error
+      }
+    });
   };
 
   return (
@@ -126,6 +146,19 @@ const NoteEditScreen = (props) => {
           {LocalizationHelperFunctions.datePL(noteLastEditDate)}
         </Text>
       </View>
+      <ConfirmDialog
+        visible={deleteNoteConfirmDialogVisible}
+        title="Usuń"
+        description="Czy na pewno chcesz usunąć tą notatkę?"
+        confirmText="Usuń"
+        OnPressConfirm={() => {
+          console.log('confirm');
+          ConfirmDeleteNote();
+        }}
+        OnPressCancel={() => {
+          setDeleteNoteConfirmDialogVisible(false);
+        }}
+      />
     </View>
   );
 };
