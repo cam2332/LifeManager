@@ -32,17 +32,17 @@ const SnackBar = (props) => {
         <Text
           style={[
             styles.description,
-            !props.buttonVisible ? styles.flex89 : styles.flex100,
+            !props.data.buttonVisible ? styles.flex89 : styles.flex100,
           ]}>
-          {props.description || 'placeholder'}
+          {props.data.description || 'placeholder'}
         </Text>
       </View>
-      {!props.buttonVisible && (
+      {!props.data.buttonVisible && (
         <TouchableOpacity
           onPress={() => props.OnPressButton()}
           style={styles.button}>
           <Text style={styles.buttonText}>
-            {props.buttonText || 'placeholder'}
+            {props.data.buttonText || 'placeholder'}
           </Text>
         </TouchableOpacity>
       )}
