@@ -105,7 +105,8 @@ const NoteEditScreen = (props) => {
           ref={noteTitleInputRef}
           style={styles.titleTextInput}
           defaultValue={title}
-          placeholder={'Notatka'}
+          placeholder={'Tytuł notatki'}
+          placeholderTextColor={SecondaryHalfColor}
           onChangeText={(newText) => setTitle(newText)}
           onEndEditing={TitleInputEndEditing}
         />
@@ -115,7 +116,8 @@ const NoteEditScreen = (props) => {
               ref={noteTextInputRef}
               style={styles.textInput}
               defaultValue={text}
-              placeholder={'Tekst'}
+              placeholder={'Treść notatki'}
+              placeholderTextColor={SecondaryHalfColor}
               multiline={true}
               onChangeText={(newText) => setText(newText)}
               onFocus={() => TextInputStartEditing()}
