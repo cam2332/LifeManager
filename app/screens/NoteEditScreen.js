@@ -6,6 +6,7 @@ import {
   KeyboardAvoidingView,
   Text,
   StyleSheet,
+  BackHandler,
 } from 'react-native';
 import {
   DarkMode,
@@ -48,7 +49,22 @@ const NoteEditScreen = (props) => {
     );
   }, [deleteNoteConfirmDialogVisible]);
 
-  const OnPressBack = () => {};
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', OnPressBack);
+    return () =>
+      BackHandler.removeEventListener('hardwareBackPress', OnPressBack);
+  });
+
+  const OnPressBack = () => {
+    props.OnPressBack({
+      ...props.note,
+      title,
+      text,
+      createDate,
+      lastEditDate,
+    });
+  };
+
   const TitleInputEndEditing = () => {
     noteTextInputRef.current.focus();
     setLastEditDate();

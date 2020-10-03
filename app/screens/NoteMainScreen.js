@@ -106,6 +106,12 @@ const NoteMainScreen = (props) => {
     NavigationHelperFunctions.NavigateToNoteEditScreen({
       note,
       OnDeleteNote: (noteId) => OnDeleteNote(noteId),
+      OnPressBack: (updatedNote) => {
+        noteList[
+          noteList.findIndex((note1) => note1.id === updatedNote.id)
+        ] = updatedNote;
+        setNoteList([...noteList]);
+      },
     });
   };
 
