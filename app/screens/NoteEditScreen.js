@@ -128,22 +128,12 @@ const NoteEditScreen = (props) => {
       </View>
       <View style={styles.dateContainer}>
         <Text style={styles.createDateText}>
-          Utworzona:{' '}
-          {noteCreateDate.getHours() +
-            ':' +
-            (noteCreateDate.getMinutes() > 9
-              ? noteCreateDate.getMinutes()
-              : '0' + noteCreateDate.getMinutes())}
+          Utworzona: {LocalizationHelperFunctions.time(noteCreateDate)}
           {'\n'}
           {LocalizationHelperFunctions.datePL(noteCreateDate)}
         </Text>
         <Text style={styles.lastEditDate}>
-          Edytowana:{' '}
-          {noteLastEditDate.getHours() +
-            ':' +
-            (noteLastEditDate.getMinutes() > 9
-              ? noteLastEditDate.getMinutes()
-              : '0' + noteLastEditDate.getMinutes())}
+          Edytowana: {LocalizationHelperFunctions.time(noteLastEditDate)}
           {'\n'}
           {LocalizationHelperFunctions.datePL(noteLastEditDate)}
         </Text>
