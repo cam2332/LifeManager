@@ -21,6 +21,7 @@ import * as NavigationHelperFunctions from '../NavigationHelperFunctions';
 import * as LocalizationHelperFunctions from '../LocalizationHelperFunctions';
 import ScreenHeader from '../components/ScreenHeader';
 import ConfirmDialog from '../components/dialogs/ConfirmDialog';
+import SnackBar from '../components/SnackBar';
 import * as NoteApi from '../services/NoteApi';
 
 const NoteEditScreen = (props) => {
@@ -33,6 +34,8 @@ const NoteEditScreen = (props) => {
     deleteNoteConfirmDialogVisible,
     setDeleteNoteConfirmDialogVisible,
   ] = useState(false);
+  const snackBarRef = useRef();
+
   const noteTitleInputRef = useRef();
   const noteTextInputRef = useRef();
   let noteCreateDate = createDate ? new Date(createDate) : new Date();
@@ -73,6 +76,11 @@ const NoteEditScreen = (props) => {
       })
       .catch((oldTitle) => {
         setTitle(oldTitle);
+        ShowSnackBar(
+          'Wystąpił błąd podczas zmiany tytułu notatki.',
+          2000,
+          false,
+        );
       });
   };
   const TextInputStartEditing = () => {
@@ -90,6 +98,11 @@ const NoteEditScreen = (props) => {
       .catch((oldText) => {
         noteTextInputRef.current.blur();
         setText(oldText);
+        ShowSnackBar(
+          'Wystąpił błąd podczas zmiany treści notatki.',
+          2000,
+          false,
+        );
       });
   };
   const DeleteNote = () => {
@@ -103,11 +116,24 @@ const NoteEditScreen = (props) => {
           NavigationHelperFunctions.noteStackId,
         );
         props.OnDeleteNote(props.note.id);
-      } else {
-        // TODO: make message with error
-      }
-    });
+      })
+      .catch(() => {
+        ShowSnackBar('Wystąpił błąd podczas usuwania notatki.', 2000, false);
+      });
   };
+
+  const ShowSnackBar = (
+    description,
+    duration,
+    buttonVisible = false,
+    buttonText = '',
+  ) => {
+    snackBarRef.current.ShowSnackBar(
+      description,
+      duration,
+      buttonText,
+      buttonVisible,
+    );
   };
 
   return (
@@ -181,6 +207,7 @@ const NoteEditScreen = (props) => {
           setDeleteNoteConfirmDialogVisible(false);
         }}
       />
+      <SnackBar ref={snackBarRef} />
     </View>
   );
 };
