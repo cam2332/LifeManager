@@ -1,56 +1,119 @@
-import React, {useEffect, useRef} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  forwardRef,
+  useImperativeHandle,
+} from 'react';
+import {View, Text, TouchableOpacity, StyleSheet, Animated} from 'react-native';
 import {
   DarkMode,
   SecondaryNegativeColor,
   PrimaryColor,
+  SecondaryColor,
+  SecondaryOneFourthColor,
   SecondaryThreeFourthColor,
 } from '../AppConfig';
 
-const SnackBar = (props) => {
-  const OnHideCallback = props.OnHide;
-  let timer = useRef();
+const SnackBar = forwardRef((props, ref) => {
+  const [height, setHeight] = useState(0);
+  const [visible, setVisible] = useState(false);
+  const [description, setDescription] = useState('');
+  const [duration, setDuration] = useState('');
+  const [buttonText, setButtonText] = useState('');
+  const [buttonVisible, setButtonVisible] = useState(false);
 
-  // component did mount
-  useEffect(() => {
-    props.visible &&
-      (timer.current = setTimeout(() => {
-        OnHideCallback();
-      }, props.data.duration || 2000));
-  }, [OnHideCallback, props.data.duration, props.visible]);
+  const showTimer = useRef();
+  const hideTimer = useRef();
+  const animationTimer = useRef();
+  const animationDuration = 150;
+  const [animatedValue] = useState(new Animated.Value(0));
 
-  // component will unmount
+  useImperativeHandle(ref, () => ({
+    ShowSnackBar(newDescription, newDuration, newButtonText, newButtonVisible) {
+      setDescription(newDescription);
+      setDuration(newDuration);
+      setButtonText(newButtonText);
+      setButtonVisible(newButtonVisible);
+      showTimer.current = setTimeout(() => {
+        setVisible(true);
+        ShowAnimation();
+      }, 100);
+    },
+  }));
+
+  const ShowAnimation = () => {
+    Animated.timing(animatedValue, {
+      toValue: 1,
+      duration: animationDuration,
+      useNativeDriver: false,
+    }).start(HideSnackBar);
+  };
+
+  const HideAnimation = () => {
+    Animated.timing(animatedValue, {
+      toValue: 0,
+      duration: animationDuration,
+      useNativeDriver: false,
+    }).start(() => {
+      animationTimer.current = setTimeout(() => {
+        setVisible(false);
+        props.OnHide && props.OnHide();
+      }, animationDuration);
+    });
+  };
+  const HideSnackBar = () => {
+    hideTimer.current = setTimeout(() => {
+      HideAnimation();
+    }, (duration || 2000) + animationDuration);
+  };
+
+  // component cleanup function
   useEffect(() => {
     return () => {
-      clearTimeout(timer.current);
+      showTimer.current && clearTimeout(showTimer.current);
+      animationTimer.current && clearTimeout(animationTimer.current);
+      hideTimer.current && clearTimeout(hideTimer.current);
     };
+  }, []);
+
+  const OnPressButton = () => {
+    props.OnPressButton();
+    HideSnackBar();
+  };
+
+  const position = animatedValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [Math.abs(height) * -1, 24],
   });
 
-  return props.visible ? (
-    <View style={styles.content}>
+  return (
+    <Animated.View
+      onLayout={(e) => {
+        setHeight(e.nativeEvent.layout.height);
+      }}
+      style={[
+        styles.content,
+        {bottom: position},
+        visible ? {opacity: 1} : {opacity: 0},
+      ]}>
       <View style={styles.descriptionView}>
         <Text
           style={[
             styles.description,
-            !props.data.buttonVisible ? styles.flex89 : styles.flex100,
+            buttonVisible ? styles.flex89 : styles.flex100,
           ]}>
-          {props.data.description || 'placeholder'}
+          {description || 'placeholder'}
         </Text>
       </View>
-      {!props.data.buttonVisible && (
-        <TouchableOpacity
-          onPress={() => props.OnPressButton()}
-          style={styles.button}>
-          <Text style={styles.buttonText}>
-            {props.data.buttonText || 'placeholder'}
-          </Text>
+      {buttonVisible && (
+        <TouchableOpacity onPress={() => OnPressButton()} style={styles.button}>
+          <Text style={styles.buttonText}>{buttonText || 'placeholder'}</Text>
         </TouchableOpacity>
       )}
-    </View>
-  ) : (
-    <View />
+    </Animated.View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   descriptionView: {flex: 1},
@@ -58,12 +121,11 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     position: 'absolute',
-    bottom: 24,
     left: 17,
     right: 17,
     backgroundColor: DarkMode
       ? SecondaryThreeFourthColor
-      : SecondaryThreeFourthColor,
+      : SecondaryOneFourthColor,
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'space-around',
@@ -79,7 +141,7 @@ const styles = StyleSheet.create({
   },
   description: {
     flexWrap: 'wrap',
-    color: SecondaryNegativeColor,
+    color: DarkMode ? SecondaryNegativeColor : SecondaryColor,
     fontSize: 14,
     marginVertical: 4,
   },
