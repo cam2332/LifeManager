@@ -66,8 +66,14 @@ const NoteEditScreen = (props) => {
   };
 
   const TitleInputEndEditing = () => {
-    noteTextInputRef.current.focus();
-    setLastEditDate();
+    NoteApi.ChangeNoteTitle(props.note.id, title)
+      .then((editDate) => {
+        setLastEditDate(editDate);
+        //noteTextInputRef.current.focus();
+      })
+      .catch((oldTitle) => {
+        setTitle(oldTitle);
+      });
   };
   const TextInputStartEditing = () => {
     setEditingText(true);
@@ -76,16 +82,23 @@ const NoteEditScreen = (props) => {
     setEditingText(false);
   };
   const OnApplyTextChange = () => {
-    noteTextInputRef.current.blur();
-    setLastEditDate();
+    NoteApi.ChangeNoteText(props.note.id, text)
+      .then((editDate) => {
+        setLastEditDate(editDate);
+        noteTextInputRef.current.blur();
+      })
+      .catch((oldText) => {
+        noteTextInputRef.current.blur();
+        setText(oldText);
+      });
   };
   const DeleteNote = () => {
     setDeleteNoteConfirmDialogVisible(true);
   };
   const ConfirmDeleteNote = () => {
     setDeleteNoteConfirmDialogVisible(false);
-    NoteApi.DeleteNote(props.note.id).then((success) => {
-      if (success) {
+    NoteApi.DeleteNote(props.note.id)
+      .then(() => {
         NavigationHelperFunctions.MoveBackOneScreen(
           NavigationHelperFunctions.noteStackId,
         );
@@ -94,6 +107,7 @@ const NoteEditScreen = (props) => {
         // TODO: make message with error
       }
     });
+  };
   };
 
   return (
