@@ -28,19 +28,59 @@ const SnackBar = forwardRef((props, ref) => {
   const animationTimer = useRef();
   const animationDuration = 150;
   const [animatedValue] = useState(new Animated.Value(0));
+  const [pressButtonCallback, setPressButtonCallback] = useState(null);
 
   useImperativeHandle(ref, () => ({
-    ShowSnackBar(newDescription, newDuration, newButtonText, newButtonVisible) {
-      setDescription(newDescription);
-      setDuration(newDuration);
-      setButtonText(newButtonText);
-      setButtonVisible(newButtonVisible);
-      showTimer.current = setTimeout(() => {
-        setVisible(true);
-        ShowAnimation();
-      }, 100);
+    ShowSnackBar(
+      newDescription,
+      newDuration,
+      newButtonText,
+      newButtonVisible,
+      newPressButtonCallback = null,
+    ) {
+      if (!visible) {
+        ShowSetup(
+          newDescription,
+          newDuration,
+          newButtonText,
+          newButtonVisible,
+          newPressButtonCallback,
+        );
+      } else {
+        HideAnimation(() => {
+          showTimer.current && clearTimeout(showTimer.current);
+          animationTimer.current && clearTimeout(animationTimer.current);
+          hideTimer.current && clearTimeout(hideTimer.current);
+          ShowSetup(
+            newDescription,
+            newDuration,
+            newButtonText,
+            newButtonVisible,
+            newPressButtonCallback,
+          );
+        });
+      }
     },
   }));
+
+  const ShowSetup = (
+    newDescription,
+    newDuration,
+    newButtonText,
+    newButtonVisible,
+    newPressButtonCallback,
+  ) => {
+    setDescription(newDescription);
+    setDuration(newDuration);
+    setButtonText(newButtonText);
+    setButtonVisible(newButtonVisible);
+    setPressButtonCallback(newPressButtonCallback);
+    showTimer.current && clearTimeout(showTimer.current);
+    showTimer.current = setTimeout(() => {
+      setVisible(true);
+      ShowAnimation();
+    }, 100);
+  };
 
   const ShowAnimation = () => {
     Animated.timing(animatedValue, {
@@ -50,19 +90,22 @@ const SnackBar = forwardRef((props, ref) => {
     }).start(HideSnackBar);
   };
 
-  const HideAnimation = () => {
+  const HideAnimation = (localOnHideCallback) => {
     Animated.timing(animatedValue, {
       toValue: 0,
       duration: animationDuration,
       useNativeDriver: false,
     }).start(() => {
+      animationTimer.current && clearTimeout(animationTimer.current);
       animationTimer.current = setTimeout(() => {
         setVisible(false);
+        localOnHideCallback && localOnHideCallback();
         props.OnHide && props.OnHide();
       }, animationDuration);
     });
   };
   const HideSnackBar = () => {
+    hideTimer.current && clearTimeout(hideTimer.current);
     hideTimer.current = setTimeout(() => {
       HideAnimation();
     }, (duration || 2000) + animationDuration);
@@ -78,8 +121,8 @@ const SnackBar = forwardRef((props, ref) => {
   }, []);
 
   const OnPressButton = () => {
-    props.OnPressButton();
-    HideSnackBar();
+    pressButtonCallback && pressButtonCallback();
+    HideAnimation();
   };
 
   const position = animatedValue.interpolate({
