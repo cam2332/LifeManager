@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   RefreshControl,
@@ -19,6 +19,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import * as NavigationHelperFunctions from '../NavigationHelperFunctions';
 import NoteCard from '../components/NoteCard';
 import * as NoteApi from '../services/NoteApi';
+import SnackBar from '../components/SnackBar';
 
 const NoteMainScreen = (props) => {
   const [noteList, setNoteList] = useState([]);
@@ -26,6 +27,8 @@ const NoteMainScreen = (props) => {
   const [isFetching, setIsFetching] = useState(false);
   const [selectMode, setSelectMode] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  const snackBarRef = useRef();
 
   useEffect(() => {
     NavigationHelperFunctions.UpdateStatusBarColor(
@@ -48,6 +51,13 @@ const NoteMainScreen = (props) => {
       .catch(() => {
         setNoteList([]);
         setIsFetching(false);
+        snackBarRef.current.ShowSnackBar(
+          'Wystąpił błąd podczas ładowania notatek.',
+          4000,
+          'Ponów',
+          true,
+          () => UpdateNoteList,
+        );
       });
   };
 
@@ -67,6 +77,12 @@ const NoteMainScreen = (props) => {
       .catch(() => {
         setNoteList([]);
         setIsFetching(false);
+        snackBarRef.current.ShowSnackBar(
+          'Wystąpił błąd podczas ładowania notatek.',
+          4000,
+          '',
+          false,
+        );
       });
   };
 
@@ -107,6 +123,15 @@ const NoteMainScreen = (props) => {
         setSelectMode(false);
         setSelectedNoteList([]);
         setIsDeleting(false);
+      })
+      .catch(() => {
+        snackBarRef.current.ShowSnackBar(
+          'Wystąpił błąd podczas usuwania notatek.',
+          4000,
+          'Ponów',
+          true,
+          () => DeleteSelectedNotes,
+        );
       });
   };
 
@@ -196,6 +221,7 @@ const NoteMainScreen = (props) => {
           color={DarkMode ? SecondaryNegativeColor : SecondaryColor}
         />
       </TouchableOpacity>
+      <SnackBar ref={snackBarRef} />
     </View>
   );
 };
