@@ -25,10 +25,15 @@ import SnackBar from '../components/SnackBar';
 import * as NoteApi from '../services/NoteApi';
 
 const NoteEditScreen = (props) => {
-  const [title, setTitle] = useState(props.note.title);
-  const [text, setText] = useState(props.note.text);
-  const [createDate, setCreateDate] = useState(props.note.createDate);
-  const [lastEditDate, setLastEditDate] = useState(props.note.lastEditDate);
+  const [id, setId] = useState(props.note.id || '');
+  const [title, setTitle] = useState(props.note.title || '');
+  const [text, setText] = useState(props.note.text || '');
+  const [createDate, setCreateDate] = useState(
+    props.note.createDate || new Date(),
+  );
+  const [lastEditDate, setLastEditDate] = useState(
+    props.note.lastEditDate || new Date(),
+  );
   const [editingText, setEditingText] = useState(false);
   const [
     deleteNoteConfirmDialogVisible,
@@ -60,7 +65,7 @@ const NoteEditScreen = (props) => {
 
   const OnPressBack = () => {
     props.OnPressBack({
-      ...props.note,
+      id,
       title,
       text,
       createDate,
@@ -69,11 +74,19 @@ const NoteEditScreen = (props) => {
   };
 
   const TitleInputEndEditing = () => {
-    NoteApi.ChangeNoteTitle(props.note.id, title)
-      .then((editDate) => {
-        setLastEditDate(editDate);
-        //noteTextInputRef.current.focus();
-      })
+    NoteApi.ChangeNoteTitle(id, title)
+      .then(
+        ({
+          id: newId,
+          createDate: newCreateDate,
+          lastEditDate: newLastEditDate,
+        }) => {
+          newId && setId(newId);
+          newCreateDate && setCreateDate(newCreateDate);
+          newLastEditDate && setLastEditDate(newLastEditDate);
+          //noteTextInputRef.current.focus();
+        },
+      )
       .catch((oldTitle) => {
         setTitle(oldTitle);
         ShowSnackBar(
@@ -90,11 +103,19 @@ const NoteEditScreen = (props) => {
     setEditingText(false);
   };
   const OnApplyTextChange = () => {
-    NoteApi.ChangeNoteText(props.note.id, text)
-      .then((editDate) => {
-        setLastEditDate(editDate);
-        noteTextInputRef.current.blur();
-      })
+    NoteApi.ChangeNoteText(id, text)
+      .then(
+        ({
+          id: newId,
+          createDate: newCreateDate,
+          lastEditDate: newLastEditDate,
+        }) => {
+          newId && setId(newId);
+          newCreateDate && setCreateDate(newCreateDate);
+          newLastEditDate && setLastEditDate(newLastEditDate);
+          noteTextInputRef.current.blur();
+        },
+      )
       .catch((oldText) => {
         noteTextInputRef.current.blur();
         setText(oldText);
@@ -110,12 +131,12 @@ const NoteEditScreen = (props) => {
   };
   const ConfirmDeleteNote = () => {
     setDeleteNoteConfirmDialogVisible(false);
-    NoteApi.DeleteNote(props.note.id)
+    NoteApi.DeleteNote(id)
       .then(() => {
         NavigationHelperFunctions.MoveBackOneScreen(
           NavigationHelperFunctions.noteStackId,
         );
-        props.OnDeleteNote(props.note.id);
+        props.OnDeleteNote(id);
       })
       .catch(() => {
         ShowSnackBar('Wystąpił błąd podczas usuwania notatki.', 2000, false);
@@ -148,7 +169,9 @@ const NoteEditScreen = (props) => {
           iconName: 'trash-sharp',
           onPress: DeleteNote,
         }}
-        rightCustomButtonVisible={true}
+        rightCustomButtonVisible={
+          id !== null && id !== undefined && id.length > 0
+        }
         leftCustomButton={{
           iconName: 'checkmark-sharp',
           onPress: OnApplyTextChange,
@@ -200,7 +223,6 @@ const NoteEditScreen = (props) => {
         description="Czy na pewno chcesz usunąć tą notatkę?"
         confirmText="Usuń"
         OnPressConfirm={() => {
-          console.log('confirm');
           ConfirmDeleteNote();
         }}
         OnPressCancel={() => {

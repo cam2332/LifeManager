@@ -84,7 +84,9 @@ const NoteMainScreen = (props) => {
     setSelectedNoteList([]);
   };
 
-  const AddNote = () => {};
+  const AddNote = () => {
+    OpenEditNoteScreen({});
+  };
 
   const DeleteSelectedNotes = () => {
     setIsDeleting(true);
@@ -107,9 +109,15 @@ const NoteMainScreen = (props) => {
       note,
       OnDeleteNote: (noteId) => OnDeleteNote(noteId),
       OnPressBack: (updatedNote) => {
-        noteList[
-          noteList.findIndex((note1) => note1.id === updatedNote.id)
-        ] = updatedNote;
+        const index = noteList.findIndex(
+          (note1) => note1.id === updatedNote.id,
+        );
+        console.log(index);
+        if (index > -1) {
+          noteList[index] = updatedNote;
+        } else {
+          noteList.push(updatedNote);
+        }
         setNoteList([...noteList]);
       },
     });
