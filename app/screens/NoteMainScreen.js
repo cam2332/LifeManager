@@ -116,7 +116,9 @@ const NoteMainScreen = (props) => {
         if (index > -1) {
           noteList[index] = updatedNote;
         } else {
-          noteList.push(updatedNote);
+          if (updatedNote.id !== '') {
+            noteList.push(updatedNote);
+          }
         }
         setNoteList([...noteList]);
       },
