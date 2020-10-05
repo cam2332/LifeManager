@@ -40,10 +40,15 @@ const NoteMainScreen = (props) => {
   }, []);
 
   const UpdateNoteList = () => {
-    NoteApi.GetAllNotes().then((notes) => {
-      setNoteList(notes);
-      setIsFetching(false);
-    });
+    NoteApi.GetAllNotes()
+      .then((notes) => {
+        setNoteList(notes);
+        setIsFetching(false);
+      })
+      .catch(() => {
+        setNoteList([]);
+        setIsFetching(false);
+      });
   };
 
   const onRefresh = () => {
@@ -54,11 +59,15 @@ const NoteMainScreen = (props) => {
   };
 
   const UpdateListFromSearch = (text) => {
-    NoteApi.GetAllNotesByTitle(text).then((notes) => {
-      setNoteList([]);
-      setNoteList(notes);
-      setIsFetching(false);
-    });
+    NoteApi.GetAllNotesByTitle(text)
+      .then((notes) => {
+        setNoteList(notes);
+        setIsFetching(false);
+      })
+      .catch(() => {
+        setNoteList([]);
+        setIsFetching(false);
+      });
   };
 
   const OnChangeSearchText = (newValue) => {
@@ -90,14 +99,15 @@ const NoteMainScreen = (props) => {
 
   const DeleteSelectedNotes = () => {
     setIsDeleting(true);
-    NoteApi.DeleteNotes(selectedNoteList).then((success) => {
-      setNoteList(
-        noteList.filter((note) => !selectedNoteList.includes(note.id)),
-      );
-      setSelectMode(false);
-      setSelectedNoteList([]);
-      setIsDeleting(false);
-    });
+    NoteApi.DeleteNotes(selectedNoteList)
+      .then((success) => {
+        setNoteList(
+          noteList.filter((note) => !selectedNoteList.includes(note.id)),
+        );
+        setSelectMode(false);
+        setSelectedNoteList([]);
+        setIsDeleting(false);
+      });
   };
 
   const OnDeleteNote = (noteId) => {
