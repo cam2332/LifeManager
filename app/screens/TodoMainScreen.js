@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -11,8 +11,17 @@ import {
   SecondaryThreeFourthColor,
 } from '../AppConfig';
 import ScreenHeader from '../components/ScreenHeader';
+import * as NavigationHelperFunctions from '../NavigationHelperFunctions';
 
 const TodoMainScreen = (props) => {
+
+  useEffect(() => {
+    NavigationHelperFunctions.UpdateStatusBarColor(
+      'TodoMainScreen',
+      SecondaryColor,
+    );
+    NavigationHelperFunctions.SetCurrentScreenId(props.componentId);
+  });
 
   const UpdateListFromSearch = (text) => {
   };
