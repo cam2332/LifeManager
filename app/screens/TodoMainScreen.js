@@ -3,17 +3,20 @@ import {
   View,
   StyleSheet,
   RefreshControl,
+  TouchableOpacity,
   FlatList,
 } from 'react-native';
 import {
   DarkMode,
   PrimaryColor,
+  PrimaryDarkColor,
   SecondaryColor,
   SecondaryNegativeColor,
   SecondaryThreeFourthColor,
 } from '../AppConfig';
 import ScreenHeader from '../components/ScreenHeader';
 import * as NavigationHelperFunctions from '../NavigationHelperFunctions';
+import Icon from 'react-native-vector-icons/Ionicons';
 import TodoCard from '../components/TodoCard';
 
 const TodoMainScreen = (props) => {
@@ -39,6 +42,8 @@ const TodoMainScreen = (props) => {
     setIsFetching(true);
     UpdateTodoList();
   };
+
+  const AddTodo = () => {};
 
   return (
     <View style={styles.mainContainer}>
@@ -72,6 +77,13 @@ const TodoMainScreen = (props) => {
           )}
         />
       </View>
+      <TouchableOpacity style={styles.floatingButton} onPress={() => AddTodo()}>
+        <Icon
+          name={'add-sharp'}
+          size={30}
+          color={DarkMode ? SecondaryNegativeColor : SecondaryColor}
+        />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -83,6 +95,19 @@ const styles = StyleSheet.create({
   listContainer: {
     flex: 1,
     marginTop: 16,
+  },
+  floatingButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 60,
+    height: 60,
+    position: 'absolute',
+    bottom: 17,
+    right: 17,
+    backgroundColor: DarkMode ? PrimaryDarkColor : PrimaryColor,
+    borderColor: DarkMode ? SecondaryNegativeColor : SecondaryColor,
+    borderWidth: 2,
+    borderRadius: 10,
   },
 });
 
