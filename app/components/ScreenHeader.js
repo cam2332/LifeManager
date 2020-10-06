@@ -218,6 +218,7 @@ const styles = StyleSheet.create({
   },
   innerContainer: {
     flexDirection: 'row',
+    justifyContent: 'center',
     flex: 1,
   },
   sideMenuButtonMainContainer: {
