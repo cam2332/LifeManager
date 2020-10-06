@@ -7,6 +7,7 @@ import RegisterScreen from './app/screens/RegisterScreen';
 import LeftSideMenu from './app/screens/LeftSideMenu';
 import NoteMainScreen from './app/screens/NoteMainScreen';
 import NoteEditScreen from './app/screens/NoteEditScreen';
+import TodoMainScreen from './app/screens/TodoMainScreen';
 
 Navigation.registerComponent('LoginScreen', () =>
   gestureHandlerRootHOC(LoginScreen),
@@ -26,6 +27,10 @@ Navigation.registerComponent('NoteMainScreen', () =>
 
 Navigation.registerComponent('NoteEditScreen', () =>
   gestureHandlerRootHOC(NoteEditScreen),
+);
+
+Navigation.registerComponent('TodoMainScreen', () =>
+  gestureHandlerRootHOC(TodoMainScreen),
 );
 
 Navigation.setDefaultOptions({
