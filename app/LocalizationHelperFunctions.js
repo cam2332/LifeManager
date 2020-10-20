@@ -16,6 +16,20 @@ export function datePL(date, {showYear = true, showWeekDay = true} = {}) {
   );
 }
 
+export function dateShortPL(date, {showYear = false, showWeekDay = true} = {}) {
+  return (
+    (showWeekDay ? daysOfWeekShortPL[date.getDay()] + ', ' : '') +
+    date.getDate() +
+    ' ' +
+    monthsShortPL[date.getMonth()] +
+    (showYear ? ' ' + date.getFullYear() : '')
+  );
+}
+
+export function yearMonthPL(date) {
+  return monthsPL[date.getMonth()] + ' ' + date.getFullYear();
+}
+
 export const daysOfWeekPL = [
   'Niedziela',
   'Poniedziałek',
@@ -24,6 +38,33 @@ export const daysOfWeekPL = [
   'Czwartek',
   'Piątek',
   'Sobota',
+];
+
+export const daysOfWeekShortPL = [
+  'niedz.',
+  'pon.',
+  'wt.',
+  'śr.',
+  'czw.',
+  'pt.',
+  'sob.',
+];
+
+export const daysOfWeekFirstLetterPL = ['p', 'w', 'ś', 'c', 'p', 's', 'n'];
+
+export const monthsPL = [
+  'Styczeń',
+  'Luty',
+  'Marzec',
+  'Kwiecień',
+  'Maj',
+  'Czerwiec',
+  'Lipiec',
+  'Sierpień',
+  'Wrzesień',
+  'Październik',
+  'Listopad',
+  'Grudzień',
 ];
 
 export const monthsAltPL = [
@@ -39,4 +80,19 @@ export const monthsAltPL = [
   'Października',
   'Listopada',
   'Grudnia',
+];
+
+export const monthsShortPL = [
+  'sty',
+  'lut',
+  'mar',
+  'kwi',
+  'maj',
+  'cze',
+  'lip',
+  'sie',
+  'wrz',
+  'paź',
+  'lis',
+  'gru',
 ];
