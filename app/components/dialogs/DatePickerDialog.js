@@ -205,11 +205,11 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   yearText: {
-    color: SecondaryColor,
+    color: DarkMode ? SecondaryNegativeColor : SecondaryColor,
     fontSize: 20,
   },
   dateText: {
-    color: SecondaryColor,
+    color: DarkMode ? SecondaryNegativeColor : SecondaryColor,
     fontSize: 35,
     fontWeight: '900',
   },
@@ -228,6 +228,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     fontSize: 19,
     fontWeight: '900',
+    color: SecondaryNegativeColor,
   },
   selectorHeaderButton: {
     padding: 5,
@@ -252,7 +253,6 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 12,
     alignItems: 'center',
-    color: SecondaryColor,
   },
   selectedGridElement: {
     backgroundColor: PrimaryColor,
