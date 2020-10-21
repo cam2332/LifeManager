@@ -2,9 +2,11 @@ import React, {useState} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {
   DarkMode,
+  LightGrey,
   SecondaryNegativeColor,
   PrimaryColor,
   SecondaryColor,
+  SecondaryOneFourthColor,
   SecondaryThreeFourthColor,
   DialogBackgroundColor,
 } from '../../AppConfig';
@@ -12,7 +14,6 @@ import Svg, {Line} from 'react-native-svg';
 
 const circleSize = 280;
 const symbolCircleSize = 40;
-const circleBackgroundColorLight = '#efefef';
 
 const TimePickerDialog = (props) => {
   const [selectedTime, setSelectedTime] = useState({
@@ -242,12 +243,12 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   timeText: {
-    color: SecondaryColor,
+    color: DarkMode ? SecondaryNegativeColor : SecondaryColor,
     fontSize: 50,
     fontWeight: '900',
   },
   activeTimeText: {
-    color: SecondaryThreeFourthColor,
+    color: DarkMode ? SecondaryOneFourthColor : SecondaryThreeFourthColor,
   },
   selectorContainer: {
     backgroundColor: DarkMode ? SecondaryThreeFourthColor : SecondaryColor,
@@ -261,7 +262,7 @@ const styles = StyleSheet.create({
     width: circleSize,
     height: circleSize,
     borderRadius: 10000,
-    backgroundColor: circleBackgroundColorLight,
+    backgroundColor: DarkMode ? SecondaryThreeFourthColor : LightGrey,
   },
   numberPoint: {
     width: symbolCircleSize,
@@ -283,7 +284,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
   },
   selectedNumberPointText: {
-    color: SecondaryColor,
+    color: DarkMode ? SecondaryNegativeColor : SecondaryColor,
   },
   centerPoint: {
     position: 'absolute',
