@@ -30,7 +30,12 @@ const TimePickerDialog = (props) => {
           styles.selectedNumberPoint,
           {left: x, top: y},
         ]}>
-        <Text style={[styles.numberPointText, styles.selectedNumberPointText]}>
+        <Text
+          style={[
+            styles.numberPointText,
+            styles.selectedNumberPointText,
+            number > 12 && !minuteHourType && styles.innerNumberPointText,
+          ]}>
           {number}
         </Text>
       </View>
@@ -57,7 +62,7 @@ const TimePickerDialog = (props) => {
       <Text
         style={[
           styles.numberPointText,
-          number > 12 && styles.innerNumberPointText,
+          number > 12 && !minuteHourType && styles.innerNumberPointText,
         ]}>
         {number}
       </Text>
@@ -177,7 +182,7 @@ const TimePickerDialog = (props) => {
                   return numberElement(
                     selectedTime.hour === item + 12,
                     index,
-                    item + 12,
+                    item + 12 === 24 ? '00' : item + 12,
                     x,
                     y,
                   );
