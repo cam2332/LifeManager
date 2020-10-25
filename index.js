@@ -7,30 +7,34 @@ import RegisterScreen from './app/screens/RegisterScreen';
 import LeftSideMenu from './app/screens/LeftSideMenu';
 import NoteMainScreen from './app/screens/NoteMainScreen';
 import NoteEditScreen from './app/screens/NoteEditScreen';
-import TodoMainScreen from './app/screens/TodoMainScreen';
+import TaskMainScreen from './app/screens/TaskMainScreen';
 
-Navigation.registerComponent('LoginScreen', () =>
+Navigation.registerComponent(NavigationHelperFunctions.LOGIN_SCREEN_ID, () =>
   gestureHandlerRootHOC(LoginScreen),
 );
 
-Navigation.registerComponent('RegisterScreen', () =>
+Navigation.registerComponent(NavigationHelperFunctions.REGISTER_SCREEN_ID, () =>
   gestureHandlerRootHOC(RegisterScreen),
 );
 
-Navigation.registerComponent('LeftSideMenu', () =>
+Navigation.registerComponent(NavigationHelperFunctions.LEFT_SIDE_MENU_ID, () =>
   gestureHandlerRootHOC(LeftSideMenu),
 );
 
-Navigation.registerComponent('NoteMainScreen', () =>
-  gestureHandlerRootHOC(NoteMainScreen),
+Navigation.registerComponent(
+  NavigationHelperFunctions.NOTE_MAIN_SCREEN_ID,
+  () => gestureHandlerRootHOC(NoteMainScreen),
 );
 
-Navigation.registerComponent('NoteEditScreen', () =>
-  gestureHandlerRootHOC(NoteEditScreen),
+Navigation.registerComponent(
+  NavigationHelperFunctions.NOTE_EDIT_SCREEN_ID,
+  () => gestureHandlerRootHOC(NoteEditScreen),
 );
 
-Navigation.registerComponent('TodoMainScreen', () =>
-  gestureHandlerRootHOC(TodoMainScreen),
+Navigation.registerComponent(
+  NavigationHelperFunctions.TASK_MAIN_SCREEN_ID,
+  () => gestureHandlerRootHOC(TaskMainScreen),
+);
 );
 
 Navigation.setDefaultOptions({

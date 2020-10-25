@@ -48,7 +48,7 @@ const NoteEditScreen = (props) => {
 
   useEffect(() => {
     NavigationHelperFunctions.UpdateStatusBarColor(
-      'NoteEditScreen',
+      NavigationHelperFunctions.NOTE_EDIT_SCREEN_ID,
       deleteNoteConfirmDialogVisible
         ? darkMode
           ? SECONDARY_COLOR
@@ -134,7 +134,7 @@ const NoteEditScreen = (props) => {
     NoteApi.DeleteNote(id)
       .then(() => {
         NavigationHelperFunctions.MoveBackOneScreen(
-          NavigationHelperFunctions.noteStackId,
+          NavigationHelperFunctions.NOTE_STACK_ID,
         );
         props.OnDeleteNote(id);
       })
@@ -177,7 +177,7 @@ const NoteEditScreen = (props) => {
           onPress: OnApplyTextChange,
         }}
         leftCustomButtonVisible={editingText}
-        stackId={NavigationHelperFunctions.noteStackId}
+        stackId={NavigationHelperFunctions.NOTE_STACK_ID}
       />
       <View style={styles.noteContainer}>
         <TextInput

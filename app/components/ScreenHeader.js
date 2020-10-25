@@ -11,10 +11,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import SearchIcon from '../../resources/SearchIcon.png';
 import MenuIcon from '../../resources/MenuButton.png';
 import {SECONDARY_NEGATIVE_COLOR, SECONDARY_HALF_COLOR} from '../AppConfig';
-import {
-  OpenLeftSideMenu,
-  MoveBackOneScreen,
-} from '../NavigationHelperFunctions';
+import * as NavigationHelperFunctions from '../NavigationHelperFunctions';
 
 const ScreenHeader = (props) => {
   const [searchBarActive, setSearchBarActive] = useState(false);
@@ -32,11 +29,11 @@ const ScreenHeader = (props) => {
   const [inputText, setInputText] = useState('');
 
   const OnPressOpenSideMenu = () => {
-    OpenLeftSideMenu();
+    NavigationHelperFunctions.OpenLeftSideMenu();
   };
 
   const OnPressBackButton = () => {
-    MoveBackOneScreen(props.stackId);
+    NavigationHelperFunctions.MoveBackOneScreen(props.stackId);
     props.OnPressBack && props.OnPressBack();
   };
 
@@ -198,6 +195,9 @@ const ScreenHeader = (props) => {
           {props.rightCustomButton &&
             props.rightCustomButtonVisible &&
             rightCustomButton(props.rightCustomButton.iconName, iconsColor)}
+          {!props.rightCustomButtonVisible && !searchButtonVisible && (
+            <View style={styles.rightCustomButtonMainContainer} />
+          )}
         </View>
       )}
       {searchBarActive && searchBar(props.searchBarTextPlaceholder)}

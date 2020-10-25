@@ -32,7 +32,7 @@ const NoteMainScreen = (props) => {
 
   useEffect(() => {
     NavigationHelperFunctions.UpdateStatusBarColor(
-      'NoteMainScreen',
+      NavigationHelperFunctions.NOTE_MAIN_SCREEN_ID,
       SECONDARY_COLOR,
     );
     NavigationHelperFunctions.SetCurrentScreenId(props.componentId);
