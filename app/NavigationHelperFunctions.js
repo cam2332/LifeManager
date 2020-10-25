@@ -65,6 +65,8 @@ const registerStack = {
 export const SetTaskRoot = () => {
   if (currentScreenId !== TASK_MAIN_SCREEN_ID) {
     Navigation.setRoot(taskStack);
+  } else {
+    HideLeftSideMenu();
   }
 };
 
@@ -119,6 +121,8 @@ const taskStack = {
 export const SetNoteRoot = () => {
   if (currentScreenId !== NOTE_MAIN_SCREEN_ID) {
     Navigation.setRoot(noteStack);
+  } else {
+    HideLeftSideMenu();
   }
 };
 
@@ -175,6 +179,16 @@ export const OpenLeftSideMenu = () => {
     sideMenu: {
       left: {
         visible: true,
+      },
+    },
+  });
+};
+
+export const HideLeftSideMenu = () => {
+  Navigation.mergeOptions(LEFT_SIDE_MENU_ID, {
+    sideMenu: {
+      left: {
+        visible: false,
       },
     },
   });
