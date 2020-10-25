@@ -226,3 +226,57 @@ export const NavigateToTaskEditScreen = (props) => {
     },
   });
 };
+
+export const SetSettingsRoot = () => {
+  if (currentScreenId !== SETTINGS_SCREEN_ID) {
+    Navigation.setRoot(settingsStack);
+  }
+};
+
+const settingsStack = {
+  root: {
+    sideMenu: {
+      left: {
+        component: {
+          id: LEFT_SIDE_MENU_ID,
+          name: LEFT_SIDE_MENU_ID,
+        },
+      },
+      center: {
+        stack: {
+          id: SETTINGS_STACK_ID,
+          children: [
+            {
+              component: {
+                id: SETTINGS_SCREEN_ID,
+                name: SETTINGS_SCREEN_ID,
+                options: {
+                  topBar: {
+                    visible: false,
+                  },
+                },
+              },
+            },
+          ],
+          options: {
+            statusBar: {
+              backgroundColor: SECONDARY_COLOR,
+              style: darkMode ? 'light' : 'dark',
+            },
+          },
+        },
+      },
+      options: {
+        sideMenu: {
+          left: {
+            width: '320',
+          },
+        },
+        statusBar: {
+          backgroundColor: SECONDARY_COLOR,
+          style: darkMode ? 'light' : 'dark',
+        },
+      },
+    },
+  },
+};
