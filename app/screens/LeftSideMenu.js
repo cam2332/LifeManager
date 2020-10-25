@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {SetNoteRoot, UpdateStatusBarColor} from '../NavigationHelperFunctions';
+import * as NavigationHelperFunctions from '../NavigationHelperFunctions';
 import {
   darkMode,
   PRIMARY_COLOR,
@@ -14,14 +14,34 @@ const mainOptions = [
   {
     text: 'Notatki',
     iconName: 'create-sharp',
-    stack: OpenNoteMainScreen,
+    stack: () => OpenNoteMainScreen(),
+  },
+  {
+    text: 'Zadania',
+    iconName: 'checkmark-done-sharp',
+    stack: () => OpenTaskMainScreen(),
   },
 ];
+
 const options = [
+  {
+    text: 'Ustawienia',
+    iconName: 'settings-sharp',
+    stack: () => OpenSettingsScreen(),
+  },
 ];
 
 const OpenNoteMainScreen = () => {
-  SetNoteRoot;
+  NavigationHelperFunctions.SetNoteRoot();
+};
+
+const OpenTaskMainScreen = () => {
+  NavigationHelperFunctions.SetTaskRoot();
+};
+
+const OpenSettingsScreen = () => {
+  NavigationHelperFunctions.SetSettingsRoot();
+};
 };
 
 const LeftSideMenu = () => {
@@ -35,7 +55,10 @@ const LeftSideMenu = () => {
   );
 
   useEffect(() => {
-    UpdateStatusBarColor('LeftSideMenu', SECONDARY_COLOR);
+    NavigationHelperFunctions.UpdateStatusBarColor(
+      NavigationHelperFunctions.LEFT_SIDE_MENU_ID,
+      SECONDARY_COLOR,
+    );
   });
 
   return (
