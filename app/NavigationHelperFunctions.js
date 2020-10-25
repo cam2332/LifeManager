@@ -1,8 +1,18 @@
 import {darkMode, PRIMARY_COLOR, SECONDARY_COLOR} from './AppConfig';
 import {Navigation} from 'react-native-navigation';
 
-export const noteStackId = 'NoteStack';
-const noteScreenId = 'NoteMainScreen';
+export const LEFT_SIDE_MENU_ID = 'LeftSideMenu';
+export const LOGIN_SCREEN_ID = 'LoginScreen';
+export const REGISTER_SCREEN_ID = 'RegisterScreen';
+export const NOTE_STACK_ID = 'NoteStack';
+export const NOTE_MAIN_SCREEN_ID = 'NoteMainScreen';
+export const NOTE_EDIT_SCREEN_ID = 'NoteEditScreen';
+export const TASK_STACK_ID = 'TaskStack';
+export const TASK_MAIN_SCREEN_ID = 'TaskMainScreen';
+export const TASK_EDIT_SCREEN_ID = 'TaskEditScreen';
+export const SETTINGS_STACK_ID = 'SettingsStack';
+export const SETTINGS_SCREEN_ID = 'SettingsScreen';
+
 export let currentScreenId = '';
 export function SetCurrentScreenId(id) {
   currentScreenId = id;
@@ -15,8 +25,8 @@ export const SetLoginRoot = () => {
 const loginStack = {
   root: {
     component: {
-      id: 'LoginScreen',
-      name: 'LoginScreen',
+      id: LOGIN_SCREEN_ID,
+      name: LOGIN_SCREEN_ID,
       options: {
         topBar: {
           visible: false,
@@ -37,8 +47,8 @@ export const SetRegisterRoot = () => {
 const registerStack = {
   root: {
     component: {
-      id: 'RegisterScreen',
-      name: 'RegisterScreen',
+      id: REGISTER_SCREEN_ID,
+      name: REGISTER_SCREEN_ID,
       options: {
         topBar: {
           visible: false,
@@ -52,8 +62,62 @@ const registerStack = {
   },
 };
 
+export const SetTaskRoot = () => {
+  if (currentScreenId !== TASK_MAIN_SCREEN_ID) {
+    Navigation.setRoot(taskStack);
+  }
+};
+
+const taskStack = {
+  root: {
+    sideMenu: {
+      left: {
+        component: {
+          id: LEFT_SIDE_MENU_ID,
+          name: LEFT_SIDE_MENU_ID,
+        },
+      },
+      center: {
+        stack: {
+          id: TASK_STACK_ID,
+          children: [
+            {
+              component: {
+                id: TASK_MAIN_SCREEN_ID,
+                name: TASK_MAIN_SCREEN_ID,
+                options: {
+                  topBar: {
+                    visible: false,
+                  },
+                },
+              },
+            },
+          ],
+          options: {
+            statusBar: {
+              backgroundColor: SECONDARY_COLOR,
+              style: darkMode ? 'light' : 'dark',
+            },
+          },
+        },
+      },
+      options: {
+        sideMenu: {
+          left: {
+            width: '320',
+          },
+        },
+        statusBar: {
+          backgroundColor: SECONDARY_COLOR,
+          style: darkMode ? 'light' : 'dark',
+        },
+      },
+    },
+  },
+};
+
 export const SetNoteRoot = () => {
-  if (currentScreenId !== noteScreenId) {
+  if (currentScreenId !== NOTE_MAIN_SCREEN_ID) {
     Navigation.setRoot(noteStack);
   }
 };
@@ -63,18 +127,18 @@ const noteStack = {
     sideMenu: {
       left: {
         component: {
-          id: 'LeftSideMenu',
-          name: 'LeftSideMenu',
+          id: LEFT_SIDE_MENU_ID,
+          name: LEFT_SIDE_MENU_ID,
         },
       },
       center: {
         stack: {
-          id: 'NoteStack',
+          id: NOTE_STACK_ID,
           children: [
             {
               component: {
-                id: 'NoteMainScreen',
-                name: 'NoteMainScreen',
+                id: NOTE_MAIN_SCREEN_ID,
+                name: NOTE_MAIN_SCREEN_ID,
                 options: {
                   topBar: {
                     visible: false,
@@ -89,12 +153,6 @@ const noteStack = {
               style: darkMode ? 'light' : 'dark',
             },
           },
-        },
-      },
-      right: {
-        component: {
-          id: 'LeftSideMenu',
-          name: 'LeftSideMenu',
         },
       },
       options: {
@@ -113,7 +171,7 @@ const noteStack = {
 };
 
 export const OpenLeftSideMenu = () => {
-  Navigation.mergeOptions('LeftSideMenu', {
+  Navigation.mergeOptions(LEFT_SIDE_MENU_ID, {
     sideMenu: {
       left: {
         visible: true,
@@ -140,10 +198,25 @@ export const UpdateStatusBarColor = (
 };
 
 export const NavigateToNoteEditScreen = (props) => {
-  Navigation.push(noteStackId, {
+  Navigation.push(NOTE_STACK_ID, {
     component: {
-      id: 'NoteEditScreen',
-      name: 'NoteEditScreen',
+      id: NOTE_EDIT_SCREEN_ID,
+      name: NOTE_EDIT_SCREEN_ID,
+      passProps: props,
+      options: {
+        topBar: {
+          visible: false,
+        },
+      },
+    },
+  });
+};
+
+export const NavigateToTaskEditScreen = (props) => {
+  Navigation.push(TASK_STACK_ID, {
+    component: {
+      id: TASK_EDIT_SCREEN_ID,
+      name: TASK_EDIT_SCREEN_ID,
       passProps: props,
       options: {
         topBar: {
