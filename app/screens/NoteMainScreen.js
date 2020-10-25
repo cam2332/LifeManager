@@ -7,12 +7,12 @@ import {
   StyleSheet,
 } from 'react-native';
 import {
-  DarkMode,
-  PrimaryColor,
-  PrimaryDarkColor,
-  SecondaryColor,
-  SecondaryNegativeColor,
-  SecondaryThreeFourthColor,
+  darkMode,
+  PRIMARY_COLOR,
+  PRIMARY_DARK_COLOR,
+  SECONDARY_COLOR,
+  SECONDARY_NEGATIVE_COLOR,
+  SECONDARY_THREE_FOURTH_COLOR,
 } from '../AppConfig';
 import ScreenHeader from '../components/ScreenHeader';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -33,7 +33,7 @@ const NoteMainScreen = (props) => {
   useEffect(() => {
     NavigationHelperFunctions.UpdateStatusBarColor(
       'NoteMainScreen',
-      SecondaryColor,
+      SECONDARY_COLOR,
     );
     NavigationHelperFunctions.SetCurrentScreenId(props.componentId);
   });
@@ -164,10 +164,12 @@ const NoteMainScreen = (props) => {
     <View style={styles.mainContainer}>
       <ScreenHeader
         title={selectMode ? selectedNoteList.length.toString() : 'Notatki'}
-        textColor={DarkMode ? SecondaryNegativeColor : PrimaryColor}
-        iconsColor={DarkMode ? SecondaryNegativeColor : PrimaryColor}
-        backgroundColor={DarkMode ? SecondaryThreeFourthColor : SecondaryColor}
-        borderColor={DarkMode ? SecondaryThreeFourthColor : PrimaryColor}
+        textColor={darkMode ? SECONDARY_NEGATIVE_COLOR : PRIMARY_COLOR}
+        iconsColor={darkMode ? SECONDARY_NEGATIVE_COLOR : PRIMARY_COLOR}
+        backgroundColor={
+          darkMode ? SECONDARY_THREE_FOURTH_COLOR : SECONDARY_COLOR
+        }
+        borderColor={darkMode ? SECONDARY_THREE_FOURTH_COLOR : PRIMARY_COLOR}
         sideMenuButtonVisible={true}
         searchButtonVisible={!selectMode}
         rightCustomButton={{
@@ -191,9 +193,9 @@ const NoteMainScreen = (props) => {
             <NoteCard
               note={item}
               onDeleteCard={() => deleteNoteFromList(item.id)}
-              backgroundColor={DarkMode ? PrimaryDarkColor : PrimaryColor}
-              titleColor={DarkMode ? SecondaryNegativeColor : SecondaryColor}
-              textColor={DarkMode ? SecondaryNegativeColor : SecondaryColor}
+              backgroundColor={darkMode ? PRIMARY_DARK_COLOR : PRIMARY_COLOR}
+              titleColor={darkMode ? SECONDARY_NEGATIVE_COLOR : SECONDARY_COLOR}
+              textColor={darkMode ? SECONDARY_NEGATIVE_COLOR : SECONDARY_COLOR}
               OnLongPressCard={(select) => {
                 !isDeleting && !selectMode && ToggleSelectNote(item.id, true);
                 !isDeleting && !selectMode && setSelectMode(true);
@@ -218,7 +220,7 @@ const NoteMainScreen = (props) => {
         <Icon
           name={selectMode ? 'trash-sharp' : 'add-sharp'}
           size={30}
-          color={DarkMode ? SecondaryNegativeColor : SecondaryColor}
+          color={darkMode ? SECONDARY_NEGATIVE_COLOR : SECONDARY_COLOR}
         />
       </TouchableOpacity>
       <SnackBar ref={snackBarRef} />
@@ -235,8 +237,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 17,
     right: 17,
-    backgroundColor: DarkMode ? PrimaryDarkColor : PrimaryColor,
-    borderColor: DarkMode ? SecondaryNegativeColor : SecondaryColor,
+    backgroundColor: darkMode ? PRIMARY_DARK_COLOR : PRIMARY_COLOR,
+    borderColor: darkMode ? SECONDARY_NEGATIVE_COLOR : SECONDARY_COLOR,
     borderWidth: 2,
     borderRadius: 30,
   },

@@ -10,7 +10,7 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import SearchIcon from '../../resources/SearchIcon.png';
 import MenuIcon from '../../resources/MenuButton.png';
-import {SecondaryNegativeColor, SecondaryHalfColor} from '../AppConfig';
+import {SECONDARY_NEGATIVE_COLOR, SECONDARY_HALF_COLOR} from '../AppConfig';
 import {
   OpenLeftSideMenu,
   MoveBackOneScreen,
@@ -136,7 +136,7 @@ const ScreenHeader = (props) => {
         ref={textInputRef}
         style={styles.searchBarTextInput}
         placeholder={searchBarTextPlaceholder}
-        placeholderTextColor={SecondaryHalfColor}
+        placeholderTextColor={SECONDARY_HALF_COLOR}
         onChangeText={(text) => OnChangeSearchText(text)}
         onEndEditing={(event) => OnEndTypingSearch(inputText)}
       />
@@ -273,7 +273,7 @@ const styles = StyleSheet.create({
   },
   searchBarTextInput: {
     marginLeft: 8,
-    color: SecondaryNegativeColor,
+    color: SECONDARY_NEGATIVE_COLOR,
     flex: 1,
     fontSize: 16,
   },

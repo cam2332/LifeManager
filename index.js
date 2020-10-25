@@ -1,6 +1,6 @@
 import {Navigation} from 'react-native-navigation';
 import * as NavigationHelperFunctions from './app/NavigationHelperFunctions';
-import {SecondaryColor} from './app/AppConfig';
+import {SECONDARY_COLOR} from './app/AppConfig';
 import {gestureHandlerRootHOC} from 'react-native-gesture-handler';
 import LoginScreen from './app/screens/LoginScreen';
 import RegisterScreen from './app/screens/RegisterScreen';
@@ -35,7 +35,7 @@ Navigation.registerComponent('TodoMainScreen', () =>
 
 Navigation.setDefaultOptions({
   layout: {
-    backgroundColor: SecondaryColor,
+    backgroundColor: SECONDARY_COLOR,
   },
 });
 

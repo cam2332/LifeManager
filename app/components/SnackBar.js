@@ -7,12 +7,12 @@ import React, {
 } from 'react';
 import {View, Text, TouchableOpacity, StyleSheet, Animated} from 'react-native';
 import {
-  DarkMode,
-  SecondaryNegativeColor,
-  PrimaryColor,
-  SecondaryColor,
-  SecondaryOneFourthColor,
-  SecondaryThreeFourthColor,
+  darkMode,
+  SECONDARY_NEGATIVE_COLOR,
+  PRIMARY_COLOR,
+  SECONDARY_COLOR,
+  SECONDARY_ONE_FOURTH_COLOR,
+  SECONDARY_THREE_FOURTH_COLOR,
 } from '../AppConfig';
 
 const SnackBar = forwardRef((props, ref) => {
@@ -166,9 +166,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 17,
     right: 17,
-    backgroundColor: DarkMode
-      ? SecondaryThreeFourthColor
-      : SecondaryOneFourthColor,
+    backgroundColor: darkMode
+      ? SECONDARY_THREE_FOURTH_COLOR
+      : SECONDARY_ONE_FOURTH_COLOR,
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'space-around',
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
   },
   description: {
     flexWrap: 'wrap',
-    color: DarkMode ? SecondaryNegativeColor : SecondaryColor,
+    color: darkMode ? SECONDARY_NEGATIVE_COLOR : SECONDARY_COLOR,
     fontSize: 14,
     marginVertical: 4,
   },
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 16,
     fontWeight: '900',
-    color: PrimaryColor,
+    color: PRIMARY_COLOR,
   },
 });
 

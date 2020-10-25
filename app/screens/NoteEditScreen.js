@@ -9,13 +9,13 @@ import {
   BackHandler,
 } from 'react-native';
 import {
-  DarkMode,
-  PrimaryColor,
-  PrimaryDarkColor,
-  SecondaryColor,
-  SecondaryHalfColor,
-  SecondaryNegativeColor,
-  DialogBackgroundColor,
+  darkMode,
+  PRIMARY_COLOR,
+  PRIMARY_DARK_COLOR,
+  SECONDARY_COLOR,
+  SECONDARY_HALF_COLOR,
+  SECONDARY_NEGATIVE_COLOR,
+  DIALOG_BACKGROUND_COLOR,
 } from '../AppConfig';
 import * as NavigationHelperFunctions from '../NavigationHelperFunctions';
 import * as LocalizationHelperFunctions from '../LocalizationHelperFunctions';
@@ -50,10 +50,10 @@ const NoteEditScreen = (props) => {
     NavigationHelperFunctions.UpdateStatusBarColor(
       'NoteEditScreen',
       deleteNoteConfirmDialogVisible
-        ? DarkMode
-          ? SecondaryColor
-          : DialogBackgroundColor
-        : SecondaryColor,
+        ? darkMode
+          ? SECONDARY_COLOR
+          : DIALOG_BACKGROUND_COLOR
+        : SECONDARY_COLOR,
     );
   }, [deleteNoteConfirmDialogVisible]);
 
@@ -160,9 +160,9 @@ const NoteEditScreen = (props) => {
   return (
     <View style={styles.mainContainer}>
       <ScreenHeader
-        iconsColor={DarkMode ? SecondaryHalfColor : PrimaryColor}
-        backgroundColor={SecondaryColor}
-        borderColor={DarkMode ? PrimaryDarkColor : PrimaryColor}
+        iconsColor={darkMode ? SECONDARY_HALF_COLOR : PRIMARY_COLOR}
+        backgroundColor={SECONDARY_COLOR}
+        borderColor={darkMode ? PRIMARY_DARK_COLOR : PRIMARY_COLOR}
         OnPressBack={OnPressBack}
         backButtonVisible={!editingText}
         rightCustomButton={{
@@ -185,7 +185,7 @@ const NoteEditScreen = (props) => {
           style={styles.titleTextInput}
           defaultValue={title}
           placeholder={'Tytuł notatki'}
-          placeholderTextColor={SecondaryHalfColor}
+          placeholderTextColor={SECONDARY_HALF_COLOR}
           onChangeText={(newText) => setTitle(newText)}
           onEndEditing={TitleInputEndEditing}
         />
@@ -196,7 +196,7 @@ const NoteEditScreen = (props) => {
               style={styles.textInput}
               defaultValue={text}
               placeholder={'Treść notatki'}
-              placeholderTextColor={SecondaryHalfColor}
+              placeholderTextColor={SECONDARY_HALF_COLOR}
               multiline={true}
               onChangeText={(newText) => setText(newText)}
               onFocus={() => TextInputStartEditing()}
@@ -237,7 +237,7 @@ const NoteEditScreen = (props) => {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: SecondaryColor,
+    backgroundColor: SECONDARY_COLOR,
   },
   noteContainer: {
     flex: 1,
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
   titleTextInput: {
     fontSize: 28,
     marginHorizontal: 45,
-    color: SecondaryNegativeColor,
+    color: SECONDARY_NEGATIVE_COLOR,
   },
   textScrollView: {
     marginVertical: 10,
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     fontSize: 16,
     lineHeight: 30,
-    color: SecondaryHalfColor,
+    color: SECONDARY_HALF_COLOR,
   },
   dateContainer: {
     flexDirection: 'row',
@@ -266,12 +266,12 @@ const styles = StyleSheet.create({
   createDateText: {
     fontSize: 11,
     textAlign: 'center',
-    color: SecondaryHalfColor,
+    color: SECONDARY_HALF_COLOR,
   },
   lastEditDate: {
     fontSize: 11,
     textAlign: 'center',
-    color: SecondaryHalfColor,
+    color: SECONDARY_HALF_COLOR,
   },
 });
 

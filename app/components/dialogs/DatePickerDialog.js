@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {
-  DarkMode,
-  SecondaryNegativeColor,
-  PrimaryColor,
-  SecondaryColor,
-  SecondaryHalfColor,
-  SecondaryThreeFourthColor,
-  DialogBackgroundColor,
+  darkMode,
+  SECONDARY_NEGATIVE_COLOR,
+  PRIMARY_COLOR,
+  SECONDARY_COLOR,
+  SECONDARY_HALF_COLOR,
+  SECONDARY_THREE_FOURTH_COLOR,
+  DIALOG_BACKGROUND_COLOR,
 } from '../../AppConfig';
 import * as LocalizationHelperFunctions from '../../LocalizationHelperFunctions';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -101,7 +101,7 @@ const DatePickerDialog = (props) => {
               onPress={DecrementVisibleDateByMonth}>
               <Icon
                 name="chevron-back-sharp"
-                color={SecondaryNegativeColor}
+                color={SECONDARY_NEGATIVE_COLOR}
                 size={24}
               />
             </TouchableOpacity>
@@ -113,7 +113,7 @@ const DatePickerDialog = (props) => {
               onPress={IncrementVisibleDateByMonth}>
               <Icon
                 name="chevron-forward-sharp"
-                color={SecondaryNegativeColor}
+                color={SECONDARY_NEGATIVE_COLOR}
                 size={24}
               />
             </TouchableOpacity>
@@ -182,7 +182,7 @@ const DatePickerDialog = (props) => {
 
 const styles = StyleSheet.create({
   backgroundContainer: {
-    backgroundColor: DialogBackgroundColor,
+    backgroundColor: DIALOG_BACKGROUND_COLOR,
     position: 'absolute',
     height: '100%',
     width: '100%',
@@ -193,10 +193,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     flex: 0.6,
     marginHorizontal: 50,
-    backgroundColor: SecondaryThreeFourthColor,
+    backgroundColor: SECONDARY_THREE_FOURTH_COLOR,
   },
   dialogHeaderContainer: {
-    backgroundColor: PrimaryColor,
+    backgroundColor: PRIMARY_COLOR,
     alignSelf: 'center',
     flex: 0.15,
     width: '100%',
@@ -205,16 +205,16 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   yearText: {
-    color: DarkMode ? SecondaryNegativeColor : SecondaryColor,
+    color: darkMode ? SECONDARY_NEGATIVE_COLOR : SECONDARY_COLOR,
     fontSize: 20,
   },
   dateText: {
-    color: DarkMode ? SecondaryNegativeColor : SecondaryColor,
+    color: darkMode ? SECONDARY_NEGATIVE_COLOR : SECONDARY_COLOR,
     fontSize: 35,
     fontWeight: '900',
   },
   selectorContainer: {
-    backgroundColor: DarkMode ? SecondaryThreeFourthColor : SecondaryColor,
+    backgroundColor: darkMode ? SECONDARY_THREE_FOURTH_COLOR : SECONDARY_COLOR,
     flex: 0.73,
     paddingHorizontal: 30,
   },
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     fontSize: 19,
     fontWeight: '900',
-    color: SecondaryNegativeColor,
+    color: SECONDARY_NEGATIVE_COLOR,
   },
   selectorHeaderButton: {
     padding: 5,
@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   gridHeaderElementText: {
-    color: SecondaryHalfColor,
+    color: SECONDARY_HALF_COLOR,
     fontSize: 17,
   },
   gridContainer: {
@@ -255,18 +255,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   selectedGridElement: {
-    backgroundColor: PrimaryColor,
+    backgroundColor: PRIMARY_COLOR,
     borderRadius: 100,
   },
   gridElementText: {
     fontSize: 16,
-    color: SecondaryNegativeColor,
+    color: SECONDARY_NEGATIVE_COLOR,
   },
   selectedGridElementText: {
-    color: SecondaryColor,
+    color: SECONDARY_COLOR,
   },
   buttonsContainer: {
-    backgroundColor: DarkMode ? SecondaryThreeFourthColor : SecondaryColor,
+    backgroundColor: darkMode ? SECONDARY_THREE_FOURTH_COLOR : SECONDARY_COLOR,
     flexDirection: 'row-reverse',
     paddingHorizontal: 30,
     flex: 0.12,
@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
   confirmButtonText: {
     fontSize: 17,
     fontWeight: '900',
-    color: DarkMode ? PrimaryColor : PrimaryColor,
+    color: darkMode ? PRIMARY_COLOR : PRIMARY_COLOR,
   },
   rejectButton: {
     paddingTop: 10,
@@ -289,7 +289,7 @@ const styles = StyleSheet.create({
   rejectButtonText: {
     fontSize: 17,
     fontWeight: '900',
-    color: DarkMode ? PrimaryColor : PrimaryColor,
+    color: darkMode ? PRIMARY_COLOR : PRIMARY_COLOR,
   },
 });
 

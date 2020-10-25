@@ -1,4 +1,4 @@
-import {DarkMode, PrimaryColor, SecondaryColor} from './AppConfig';
+import {darkMode, PRIMARY_COLOR, SECONDARY_COLOR} from './AppConfig';
 import {Navigation} from 'react-native-navigation';
 
 export const noteStackId = 'NoteStack';
@@ -22,8 +22,8 @@ const loginStack = {
           visible: false,
         },
         statusBar: {
-          backgroundColor: SecondaryColor,
-          style: DarkMode ? 'light' : 'dark',
+          backgroundColor: SECONDARY_COLOR,
+          style: darkMode ? 'light' : 'dark',
         },
       },
     },
@@ -44,8 +44,8 @@ const registerStack = {
           visible: false,
         },
         statusBar: {
-          backgroundColor: SecondaryColor,
-          style: DarkMode ? 'light' : 'dark',
+          backgroundColor: SECONDARY_COLOR,
+          style: darkMode ? 'light' : 'dark',
         },
       },
     },
@@ -85,8 +85,8 @@ const noteStack = {
           ],
           options: {
             statusBar: {
-              backgroundColor: PrimaryColor,
-              style: DarkMode ? 'light' : 'dark',
+              backgroundColor: PRIMARY_COLOR,
+              style: darkMode ? 'light' : 'dark',
             },
           },
         },
@@ -104,8 +104,8 @@ const noteStack = {
           },
         },
         statusBar: {
-          backgroundColor: PrimaryColor,
-          style: DarkMode ? 'light' : 'dark',
+          backgroundColor: PRIMARY_COLOR,
+          style: darkMode ? 'light' : 'dark',
         },
       },
     },
@@ -129,7 +129,7 @@ export const MoveBackOneScreen = (stackId) => {
 export const UpdateStatusBarColor = (
   screenId,
   backgroundColor,
-  style = DarkMode ? 'light' : 'dark',
+  style = darkMode ? 'light' : 'dark',
 ) => {
   Navigation.mergeOptions(screenId, {
     statusBar: {

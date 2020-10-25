@@ -1,14 +1,14 @@
 import React, {useState, useEffect} from 'react';
 import {TouchableOpacity, View, Text, StyleSheet} from 'react-native';
-import {SecondaryNegativeColor, SecondaryHalfColor} from '../AppConfig';
+import {SECONDARY_NEGATIVE_COLOR, SECONDARY_HALF_COLOR} from '../AppConfig';
 
 const NoteCard = (props) => {
   const defaultBackgroundColor =
-    props.note.color || props.backgroundColor || SecondaryHalfColor;
-  const defaultTitleColor = props.titleColor || SecondaryNegativeColor;
-  const defaultTextColor = props.textColor || SecondaryNegativeColor;
+    props.note.color || props.backgroundColor || SECONDARY_HALF_COLOR;
+  const defaultTitleColor = props.titleColor || SECONDARY_NEGATIVE_COLOR;
+  const defaultTextColor = props.textColor || SECONDARY_NEGATIVE_COLOR;
   const defaultBorderColor =
-    props.borderColor || defaultBackgroundColor || SecondaryHalfColor;
+    props.borderColor || defaultBackgroundColor || SECONDARY_HALF_COLOR;
 
   const [backgroundColor, setBackgroundColor] = useState(
     props.selected ? defaultTitleColor : defaultBackgroundColor,

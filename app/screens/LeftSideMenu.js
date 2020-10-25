@@ -3,11 +3,11 @@ import {View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {SetNoteRoot, UpdateStatusBarColor} from '../NavigationHelperFunctions';
 import {
-  DarkMode,
-  PrimaryColor,
-  SecondaryColor,
-  SecondaryHalfColor,
-  SecondaryNegativeColor,
+  darkMode,
+  PRIMARY_COLOR,
+  SECONDARY_COLOR,
+  SECONDARY_HALF_COLOR,
+  SECONDARY_NEGATIVE_COLOR,
 } from '../AppConfig';
 
 const mainOptions = [
@@ -28,14 +28,14 @@ const LeftSideMenu = () => {
   const [textSize, setTextSize] = useState(15);
   const [iconSize, setIconSize] = useState(29);
   const [iconColor, setIconColor] = useState(
-    DarkMode ? SecondaryNegativeColor : PrimaryColor,
+    darkMode ? SECONDARY_NEGATIVE_COLOR : PRIMARY_COLOR,
   );
   const [textColor, setTextColor] = useState(
-    DarkMode ? SecondaryNegativeColor : SecondaryHalfColor,
+    darkMode ? SECONDARY_NEGATIVE_COLOR : SECONDARY_HALF_COLOR,
   );
 
   useEffect(() => {
-    UpdateStatusBarColor('LeftSideMenu', SecondaryColor);
+    UpdateStatusBarColor('LeftSideMenu', SECONDARY_COLOR);
   });
 
   return (
@@ -43,7 +43,7 @@ const LeftSideMenu = () => {
       style={[
         styles.mainContainer,
         {
-          backgroundColor: SecondaryColor,
+          backgroundColor: SECONDARY_COLOR,
         },
       ]}>
       <FlatList
