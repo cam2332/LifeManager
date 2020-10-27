@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -27,6 +27,11 @@ const ScreenHeader = (props) => {
 
   const textInputRef = useRef(null);
   const [inputText, setInputText] = useState('');
+
+  useEffect(() => {
+    setIconsColor(props.iconsColor);
+    setTextColor(props.textColor);
+  }, [props.iconsColor, props.textColor]);
 
   const OnPressOpenSideMenu = () => {
     NavigationHelperFunctions.OpenLeftSideMenu();
