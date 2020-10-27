@@ -12,6 +12,8 @@ export const TASK_MAIN_SCREEN_ID = 'TaskMainScreen';
 export const TASK_EDIT_SCREEN_ID = 'TaskEditScreen';
 export const SETTINGS_STACK_ID = 'SettingsStack';
 export const SETTINGS_SCREEN_ID = 'SettingsScreen';
+export const APP_INFO_STACK_ID = 'AppInfoStack';
+export const APP_INFO_SCREEN_ID = 'AppInfoScreen';
 
 export let currentScreenId = '';
 export function SetCurrentScreenId(id) {
@@ -266,6 +268,62 @@ const settingsStack = {
               component: {
                 id: SETTINGS_SCREEN_ID,
                 name: SETTINGS_SCREEN_ID,
+                options: {
+                  topBar: {
+                    visible: false,
+                  },
+                },
+              },
+            },
+          ],
+          options: {
+            statusBar: {
+              backgroundColor: SECONDARY_COLOR,
+              style: darkMode ? 'light' : 'dark',
+            },
+          },
+        },
+      },
+      options: {
+        sideMenu: {
+          left: {
+            width: '320',
+          },
+        },
+        statusBar: {
+          backgroundColor: SECONDARY_COLOR,
+          style: darkMode ? 'light' : 'dark',
+        },
+      },
+    },
+  },
+};
+
+export const SetAppInfoRoot = () => {
+  if (currentScreenId !== APP_INFO_SCREEN_ID) {
+    Navigation.setRoot(appInfoStack);
+  } else {
+    HideLeftSideMenu();
+  }
+};
+
+const appInfoStack = {
+  root: {
+    sideMenu: {
+      left: {
+        component: {
+          id: LEFT_SIDE_MENU_ID,
+          name: LEFT_SIDE_MENU_ID,
+        },
+      },
+      center: {
+        stack: {
+          id: APP_INFO_STACK_ID,
+          children: [
+            {
+              component: {
+                id: APP_INFO_SCREEN_ID,
+                name: APP_INFO_SCREEN_ID,
                 options: {
                   topBar: {
                     visible: false,

@@ -29,6 +29,11 @@ const options = [
     iconName: 'settings-sharp',
     stack: () => OpenSettingsScreen(),
   },
+  {
+    text: 'Informacje o aplikacji',
+    iconName: 'information-circle-sharp',
+    stack: () => OpenAppInfoScreen(),
+  },
 ];
 
 const OpenNoteMainScreen = () => {
@@ -42,6 +47,9 @@ const OpenTaskMainScreen = () => {
 const OpenSettingsScreen = () => {
   NavigationHelperFunctions.SetSettingsRoot();
 };
+
+const OpenAppInfoScreen = () => {
+  NavigationHelperFunctions.SetAppInfoRoot();
 };
 
 const LeftSideMenu = () => {
