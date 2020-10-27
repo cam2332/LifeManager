@@ -15,23 +15,23 @@ import {
   SetDarkMode,
   Colors,
   UpdateColors,
-  PRIMARY_COLOR,
+  primaryColor,
   SetPrimaryColor,
-  PRIMARY_DARK_COLOR,
+  primaryDarkColor,
   SetPrimaryDarkColor,
-  SECONDARY_COLOR,
+  secondaryColor,
   SECONDARY_HALF_COLOR,
-  SECONDARY_THREE_FOURTH_COLOR,
-  SECONDARY_NEGATIVE_COLOR,
+  secondaryThreeFourthColor,
+  secondaryNegativeColor,
 } from '../AppConfig';
 import ScreenHeader from '../components/ScreenHeader';
 import * as NavigationHelperFunctions from '../NavigationHelperFunctions';
 
 const SettingsScreen = (props) => {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
-  const [primaryColor, setPrimaryColor] = useState({
-    Normal: PRIMARY_COLOR,
-    Dark: PRIMARY_DARK_COLOR,
+  const [localPrimaryColor, setPrimaryColor] = useState({
+    Normal: primaryColor,
+    Dark: primaryDarkColor,
   });
   const [isDarkMode, setDarkMode] = useState(darkMode);
   const [offlineMode, setOfflineMode] = useState(false);
@@ -40,50 +40,48 @@ const SettingsScreen = (props) => {
   useEffect(() => {
     NavigationHelperFunctions.UpdateStatusBarColor(
       props.componentId,
-      SECONDARY_COLOR,
+      secondaryColor,
     );
     NavigationHelperFunctions.SetCurrentScreenId(props.componentId);
   });
 
   const optionTextStyle = StyleSheet.flatten([
     styles.optionText,
-    {color: SECONDARY_NEGATIVE_COLOR},
+    {color: secondaryNegativeColor},
   ]);
 
   const subOptionTextStyle = StyleSheet.flatten([
     styles.optionSubText,
-    {color: SECONDARY_NEGATIVE_COLOR},
+    {color: secondaryNegativeColor},
   ]);
 
   const sectionTitleStyle = StyleSheet.flatten([
     styles.sectionTitle,
-    {color: PRIMARY_COLOR},
+    {color: primaryColor},
   ]);
   const spacerLineStyle = StyleSheet.flatten([
     styles.spacerLine,
-    {backgroundColor: SECONDARY_THREE_FOURTH_COLOR},
+    {backgroundColor: secondaryThreeFourthColor},
   ]);
 
   const logoutButtonStyle = StyleSheet.flatten([
     styles.logoutButton,
-    {backgroundColor: PRIMARY_COLOR},
+    {backgroundColor: primaryColor},
   ]);
 
   const mainContainerStyle = StyleSheet.flatten([
     styles.mainContainer,
-    {backgroundColor: SECONDARY_COLOR},
+    {backgroundColor: secondaryColor},
   ]);
 
   return (
     <View style={mainContainerStyle}>
       <ScreenHeader
         title="Ustawienia"
-        textColor={darkMode ? SECONDARY_NEGATIVE_COLOR : PRIMARY_COLOR}
-        iconsColor={darkMode ? SECONDARY_NEGATIVE_COLOR : PRIMARY_COLOR}
-        backgroundColor={
-          darkMode ? SECONDARY_THREE_FOURTH_COLOR : SECONDARY_COLOR
-        }
-        borderColor={darkMode ? SECONDARY_THREE_FOURTH_COLOR : PRIMARY_COLOR}
+        textColor={darkMode ? secondaryNegativeColor : primaryColor}
+        iconsColor={darkMode ? secondaryNegativeColor : primaryColor}
+        backgroundColor={darkMode ? secondaryThreeFourthColor : secondaryColor}
+        borderColor={darkMode ? secondaryThreeFourthColor : primaryColor}
         sideMenuButtonVisible={true}
       />
       <ScrollView style={styles.settingsContainer}>
@@ -132,7 +130,6 @@ const SettingsScreen = (props) => {
                 activeOpacity={0.9}
                 onPress={() => {
                   SetPrimaryColor(color.Normal);
-                  console.log(PRIMARY_COLOR);
                   SetPrimaryDarkColor(color.Dark);
                   setPrimaryColor({
                     Normal: color.Normal,
@@ -144,9 +141,9 @@ const SettingsScreen = (props) => {
                   styles.flexDirectionRow,
                   {
                     borderColor:
-                      primaryColor.Normal === color.Normal
-                        ? SECONDARY_NEGATIVE_COLOR
-                        : SECONDARY_COLOR,
+                      localPrimaryColor.Normal === color.Normal
+                        ? secondaryNegativeColor
+                        : secondaryColor,
                   },
                 ]}>
                 <View
@@ -179,8 +176,8 @@ const SettingsScreen = (props) => {
                 {
                   borderColor:
                     isDarkMode === false
-                      ? SECONDARY_NEGATIVE_COLOR
-                      : SECONDARY_COLOR,
+                      ? secondaryNegativeColor
+                      : secondaryColor,
                 },
                 {backgroundColor: WHITE},
               ]}
@@ -198,8 +195,8 @@ const SettingsScreen = (props) => {
                 {
                   borderColor:
                     isDarkMode === true
-                      ? SECONDARY_NEGATIVE_COLOR
-                      : SECONDARY_COLOR,
+                      ? secondaryNegativeColor
+                      : secondaryColor,
                 },
                 {backgroundColor: BLACK},
               ]}
@@ -222,10 +219,10 @@ const SettingsScreen = (props) => {
                 value={offlineMode}
                 onValueChange={setOfflineMode}
                 trackColor={{
-                  true: PRIMARY_COLOR,
-                  false: SECONDARY_THREE_FOURTH_COLOR,
+                  true: primaryColor,
+                  false: secondaryThreeFourthColor,
                 }}
-                thumbColor={darkMode ? SECONDARY_HALF_COLOR : SECONDARY_COLOR}
+                thumbColor={darkMode ? SECONDARY_HALF_COLOR : secondaryColor}
               />
             </View>
             <View style={styles.switchContainer}>
@@ -234,10 +231,10 @@ const SettingsScreen = (props) => {
                 value={automaticSync}
                 onValueChange={setAutomaticSync}
                 trackColor={{
-                  true: PRIMARY_COLOR,
-                  false: SECONDARY_THREE_FOURTH_COLOR,
+                  true: primaryColor,
+                  false: secondaryThreeFourthColor,
                 }}
-                thumbColor={darkMode ? SECONDARY_HALF_COLOR : SECONDARY_COLOR}
+                thumbColor={darkMode ? SECONDARY_HALF_COLOR : secondaryColor}
               />
             </View>
           </View>
@@ -295,14 +292,14 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   logoutButton: {
-    backgroundColor: PRIMARY_COLOR,
+    backgroundColor: primaryColor,
     alignSelf: 'center',
     paddingVertical: 5,
     paddingHorizontal: 20,
     borderRadius: 4,
   },
   logoutButtonText: {
-    color: darkMode ? SECONDARY_NEGATIVE_COLOR : SECONDARY_COLOR,
+    color: darkMode ? secondaryNegativeColor : secondaryColor,
     fontSize: 19,
   },
   halfWidthColorBox: {

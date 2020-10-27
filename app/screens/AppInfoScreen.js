@@ -2,24 +2,22 @@ import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import {
   darkMode,
-  PRIMARY_COLOR,
-  SECONDARY_COLOR,
-  SECONDARY_THREE_FOURTH_COLOR,
-  SECONDARY_NEGATIVE_COLOR,
+  primaryColor,
+  secondaryColor,
+  secondaryThreeFourthColor,
+  secondaryNegativeColor,
 } from '../AppConfig';
 import ScreenHeader from '../components/ScreenHeader';
 
 const AppInfoScreen = (props) => {
   return (
-    <View style={[styles.mainContainer, {backgroundColor: SECONDARY_COLOR}]}>
+    <View style={[styles.mainContainer, {backgroundColor: secondaryColor}]}>
       <ScreenHeader
         title="Informacje"
-        textColor={darkMode ? SECONDARY_NEGATIVE_COLOR : PRIMARY_COLOR}
-        iconsColor={darkMode ? SECONDARY_NEGATIVE_COLOR : PRIMARY_COLOR}
-        backgroundColor={
-          darkMode ? SECONDARY_THREE_FOURTH_COLOR : SECONDARY_COLOR
-        }
-        borderColor={darkMode ? SECONDARY_THREE_FOURTH_COLOR : PRIMARY_COLOR}
+        textColor={darkMode ? secondaryNegativeColor : primaryColor}
+        iconsColor={darkMode ? secondaryNegativeColor : primaryColor}
+        backgroundColor={darkMode ? secondaryThreeFourthColor : secondaryColor}
+        borderColor={darkMode ? secondaryThreeFourthColor : primaryColor}
         sideMenuButtonVisible={true}
       />
     </View>

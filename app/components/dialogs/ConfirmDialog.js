@@ -2,11 +2,11 @@ import React from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {
   darkMode,
-  SECONDARY_NEGATIVE_COLOR,
-  PRIMARY_COLOR,
-  SECONDARY_COLOR,
-  SECONDARY_THREE_FOURTH_COLOR,
-  DIALOG_BACKGROUND_COLOR,
+  secondaryNegativeColor,
+  primaryColor,
+  secondaryColor,
+  secondaryThreeFourthColor,
+  dialogBackgroundColor,
 } from '../../AppConfig';
 
 const ConfirmDialog = (props) => {
@@ -44,7 +44,7 @@ const ConfirmDialog = (props) => {
 
 const styles = StyleSheet.create({
   backgroundContainer: {
-    backgroundColor: DIALOG_BACKGROUND_COLOR,
+    backgroundColor: dialogBackgroundColor,
     position: 'absolute',
     height: '100%',
     width: '100%',
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 40,
   },
   dialogContent: {
-    backgroundColor: darkMode ? SECONDARY_THREE_FOURTH_COLOR : SECONDARY_COLOR,
+    backgroundColor: darkMode ? secondaryThreeFourthColor : secondaryColor,
     alignSelf: 'center',
     flex: 1,
     paddingHorizontal: 30,
@@ -65,13 +65,13 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   title: {
-    color: SECONDARY_NEGATIVE_COLOR,
+    color: secondaryNegativeColor,
     fontSize: 19,
     fontWeight: '700',
     marginVertical: 10,
   },
   description: {
-    color: SECONDARY_NEGATIVE_COLOR,
+    color: secondaryNegativeColor,
     fontSize: 15,
     marginVertical: 10,
   },
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
   confirmButtonText: {
     fontSize: 17,
     fontWeight: '900',
-    color: darkMode ? PRIMARY_COLOR : PRIMARY_COLOR,
+    color: darkMode ? primaryColor : primaryColor,
   },
   rejectButton: {
     paddingTop: 10,
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   rejectButtonText: {
     fontSize: 17,
     fontWeight: '900',
-    color: darkMode ? PRIMARY_COLOR : PRIMARY_COLOR,
+    color: darkMode ? primaryColor : primaryColor,
   },
 });
 

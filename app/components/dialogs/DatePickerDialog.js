@@ -2,12 +2,12 @@ import React, {useState} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {
   darkMode,
-  SECONDARY_NEGATIVE_COLOR,
-  PRIMARY_COLOR,
-  SECONDARY_COLOR,
+  secondaryNegativeColor,
+  primaryColor,
+  secondaryColor,
   SECONDARY_HALF_COLOR,
-  SECONDARY_THREE_FOURTH_COLOR,
-  DIALOG_BACKGROUND_COLOR,
+  secondaryThreeFourthColor,
+  dialogBackgroundColor,
 } from '../../AppConfig';
 import * as LocalizationHelperFunctions from '../../LocalizationHelperFunctions';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -101,7 +101,7 @@ const DatePickerDialog = (props) => {
               onPress={DecrementVisibleDateByMonth}>
               <Icon
                 name="chevron-back-sharp"
-                color={SECONDARY_NEGATIVE_COLOR}
+                color={secondaryNegativeColor}
                 size={24}
               />
             </TouchableOpacity>
@@ -113,7 +113,7 @@ const DatePickerDialog = (props) => {
               onPress={IncrementVisibleDateByMonth}>
               <Icon
                 name="chevron-forward-sharp"
-                color={SECONDARY_NEGATIVE_COLOR}
+                color={secondaryNegativeColor}
                 size={24}
               />
             </TouchableOpacity>
@@ -182,7 +182,7 @@ const DatePickerDialog = (props) => {
 
 const styles = StyleSheet.create({
   backgroundContainer: {
-    backgroundColor: DIALOG_BACKGROUND_COLOR,
+    backgroundColor: dialogBackgroundColor,
     position: 'absolute',
     height: '100%',
     width: '100%',
@@ -193,10 +193,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     flex: 0.6,
     marginHorizontal: 50,
-    backgroundColor: SECONDARY_THREE_FOURTH_COLOR,
+    backgroundColor: secondaryThreeFourthColor,
   },
   dialogHeaderContainer: {
-    backgroundColor: PRIMARY_COLOR,
+    backgroundColor: primaryColor,
     alignSelf: 'center',
     flex: 0.15,
     width: '100%',
@@ -205,16 +205,16 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   yearText: {
-    color: darkMode ? SECONDARY_NEGATIVE_COLOR : SECONDARY_COLOR,
+    color: darkMode ? secondaryNegativeColor : secondaryColor,
     fontSize: 20,
   },
   dateText: {
-    color: darkMode ? SECONDARY_NEGATIVE_COLOR : SECONDARY_COLOR,
+    color: darkMode ? secondaryNegativeColor : secondaryColor,
     fontSize: 35,
     fontWeight: '900',
   },
   selectorContainer: {
-    backgroundColor: darkMode ? SECONDARY_THREE_FOURTH_COLOR : SECONDARY_COLOR,
+    backgroundColor: darkMode ? secondaryThreeFourthColor : secondaryColor,
     flex: 0.73,
     paddingHorizontal: 30,
   },
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     fontSize: 19,
     fontWeight: '900',
-    color: SECONDARY_NEGATIVE_COLOR,
+    color: secondaryNegativeColor,
   },
   selectorHeaderButton: {
     padding: 5,
@@ -255,18 +255,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   selectedGridElement: {
-    backgroundColor: PRIMARY_COLOR,
+    backgroundColor: primaryColor,
     borderRadius: 100,
   },
   gridElementText: {
     fontSize: 16,
-    color: SECONDARY_NEGATIVE_COLOR,
+    color: secondaryNegativeColor,
   },
   selectedGridElementText: {
-    color: SECONDARY_COLOR,
+    color: secondaryColor,
   },
   buttonsContainer: {
-    backgroundColor: darkMode ? SECONDARY_THREE_FOURTH_COLOR : SECONDARY_COLOR,
+    backgroundColor: darkMode ? secondaryThreeFourthColor : secondaryColor,
     flexDirection: 'row-reverse',
     paddingHorizontal: 30,
     flex: 0.12,
@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
   confirmButtonText: {
     fontSize: 17,
     fontWeight: '900',
-    color: darkMode ? PRIMARY_COLOR : PRIMARY_COLOR,
+    color: darkMode ? primaryColor : primaryColor,
   },
   rejectButton: {
     paddingTop: 10,
@@ -289,7 +289,7 @@ const styles = StyleSheet.create({
   rejectButtonText: {
     fontSize: 17,
     fontWeight: '900',
-    color: darkMode ? PRIMARY_COLOR : PRIMARY_COLOR,
+    color: darkMode ? primaryColor : primaryColor,
   },
 });
 

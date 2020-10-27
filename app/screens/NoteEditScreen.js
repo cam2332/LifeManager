@@ -10,12 +10,12 @@ import {
 } from 'react-native';
 import {
   darkMode,
-  PRIMARY_COLOR,
-  PRIMARY_DARK_COLOR,
-  SECONDARY_COLOR,
+  primaryColor,
+  primaryDarkColor,
+  secondaryColor,
   SECONDARY_HALF_COLOR,
-  SECONDARY_NEGATIVE_COLOR,
-  DIALOG_BACKGROUND_COLOR,
+  secondaryNegativeColor,
+  dialogBackgroundColor,
 } from '../AppConfig';
 import * as NavigationHelperFunctions from '../NavigationHelperFunctions';
 import * as LocalizationHelperFunctions from '../LocalizationHelperFunctions';
@@ -51,9 +51,9 @@ const NoteEditScreen = (props) => {
       NavigationHelperFunctions.NOTE_EDIT_SCREEN_ID,
       deleteNoteConfirmDialogVisible
         ? darkMode
-          ? SECONDARY_COLOR
-          : DIALOG_BACKGROUND_COLOR
-        : SECONDARY_COLOR,
+          ? secondaryColor
+          : dialogBackgroundColor
+        : secondaryColor,
     );
   }, [deleteNoteConfirmDialogVisible]);
 
@@ -160,9 +160,9 @@ const NoteEditScreen = (props) => {
   return (
     <View style={styles.mainContainer}>
       <ScreenHeader
-        iconsColor={darkMode ? SECONDARY_HALF_COLOR : PRIMARY_COLOR}
-        backgroundColor={SECONDARY_COLOR}
-        borderColor={darkMode ? PRIMARY_DARK_COLOR : PRIMARY_COLOR}
+        iconsColor={darkMode ? SECONDARY_HALF_COLOR : primaryColor}
+        backgroundColor={secondaryColor}
+        borderColor={darkMode ? primaryDarkColor : primaryColor}
         OnPressBack={OnPressBack}
         backButtonVisible={!editingText}
         rightCustomButton={{
@@ -237,7 +237,7 @@ const NoteEditScreen = (props) => {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: SECONDARY_COLOR,
+    backgroundColor: secondaryColor,
   },
   noteContainer: {
     flex: 1,
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
   titleTextInput: {
     fontSize: 28,
     marginHorizontal: 45,
-    color: SECONDARY_NEGATIVE_COLOR,
+    color: secondaryNegativeColor,
   },
   textScrollView: {
     marginVertical: 10,

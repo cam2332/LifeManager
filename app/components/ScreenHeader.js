@@ -10,7 +10,7 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import SearchIcon from '../../resources/SearchIcon.png';
 import MenuIcon from '../../resources/MenuButton.png';
-import {SECONDARY_NEGATIVE_COLOR, SECONDARY_HALF_COLOR} from '../AppConfig';
+import {secondaryNegativeColor, SECONDARY_HALF_COLOR} from '../AppConfig';
 import * as NavigationHelperFunctions from '../NavigationHelperFunctions';
 
 const ScreenHeader = (props) => {
@@ -273,7 +273,7 @@ const styles = StyleSheet.create({
   },
   searchBarTextInput: {
     marginLeft: 8,
-    color: SECONDARY_NEGATIVE_COLOR,
+    color: secondaryNegativeColor,
     flex: 1,
     fontSize: 16,
   },

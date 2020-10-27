@@ -4,10 +4,10 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import * as NavigationHelperFunctions from '../NavigationHelperFunctions';
 import {
   darkMode,
-  PRIMARY_COLOR,
-  SECONDARY_COLOR,
+  primaryColor,
+  secondaryColor,
   SECONDARY_HALF_COLOR,
-  SECONDARY_NEGATIVE_COLOR,
+  secondaryNegativeColor,
 } from '../AppConfig';
 
 const mainOptions = [
@@ -56,16 +56,16 @@ const LeftSideMenu = () => {
   const [textSize, setTextSize] = useState(15);
   const [iconSize, setIconSize] = useState(29);
   const [iconColor, setIconColor] = useState(
-    darkMode ? SECONDARY_NEGATIVE_COLOR : PRIMARY_COLOR,
+    darkMode ? secondaryNegativeColor : primaryColor,
   );
   const [textColor, setTextColor] = useState(
-    darkMode ? SECONDARY_NEGATIVE_COLOR : SECONDARY_HALF_COLOR,
+    darkMode ? secondaryNegativeColor : SECONDARY_HALF_COLOR,
   );
 
   useEffect(() => {
     NavigationHelperFunctions.UpdateStatusBarColor(
       NavigationHelperFunctions.LEFT_SIDE_MENU_ID,
-      SECONDARY_COLOR,
+      secondaryColor,
     );
   });
 
@@ -74,7 +74,7 @@ const LeftSideMenu = () => {
       style={[
         styles.mainContainer,
         {
-          backgroundColor: SECONDARY_COLOR,
+          backgroundColor: secondaryColor,
         },
       ]}>
       <FlatList

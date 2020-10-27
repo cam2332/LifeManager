@@ -1,4 +1,4 @@
-import {darkMode, PRIMARY_COLOR, SECONDARY_COLOR} from './AppConfig';
+import {darkMode, primaryColor, secondaryColor} from './AppConfig';
 import {Navigation} from 'react-native-navigation';
 
 export const LEFT_SIDE_MENU_ID = 'LeftSideMenu';
@@ -34,7 +34,7 @@ const loginStack = {
           visible: false,
         },
         statusBar: {
-          backgroundColor: SECONDARY_COLOR,
+          backgroundColor: secondaryColor,
           style: darkMode ? 'light' : 'dark',
         },
       },
@@ -56,7 +56,7 @@ const registerStack = {
           visible: false,
         },
         statusBar: {
-          backgroundColor: SECONDARY_COLOR,
+          backgroundColor: secondaryColor,
           style: darkMode ? 'light' : 'dark',
         },
       },
@@ -99,7 +99,7 @@ const taskStack = {
           ],
           options: {
             statusBar: {
-              backgroundColor: SECONDARY_COLOR,
+              backgroundColor: secondaryColor,
               style: darkMode ? 'light' : 'dark',
             },
           },
@@ -112,7 +112,7 @@ const taskStack = {
           },
         },
         statusBar: {
-          backgroundColor: SECONDARY_COLOR,
+          backgroundColor: secondaryColor,
           style: darkMode ? 'light' : 'dark',
         },
       },
@@ -155,7 +155,7 @@ const noteStack = {
           ],
           options: {
             statusBar: {
-              backgroundColor: PRIMARY_COLOR,
+              backgroundColor: primaryColor,
               style: darkMode ? 'light' : 'dark',
             },
           },
@@ -168,7 +168,7 @@ const noteStack = {
           },
         },
         statusBar: {
-          backgroundColor: PRIMARY_COLOR,
+          backgroundColor: primaryColor,
           style: darkMode ? 'light' : 'dark',
         },
       },
@@ -278,7 +278,7 @@ const settingsStack = {
           ],
           options: {
             statusBar: {
-              backgroundColor: SECONDARY_COLOR,
+              backgroundColor: secondaryColor,
               style: darkMode ? 'light' : 'dark',
             },
           },
@@ -291,7 +291,7 @@ const settingsStack = {
           },
         },
         statusBar: {
-          backgroundColor: SECONDARY_COLOR,
+          backgroundColor: secondaryColor,
           style: darkMode ? 'light' : 'dark',
         },
       },
@@ -334,7 +334,7 @@ const appInfoStack = {
           ],
           options: {
             statusBar: {
-              backgroundColor: SECONDARY_COLOR,
+              backgroundColor: secondaryColor,
               style: darkMode ? 'light' : 'dark',
             },
           },
@@ -347,7 +347,7 @@ const appInfoStack = {
           },
         },
         statusBar: {
-          backgroundColor: SECONDARY_COLOR,
+          backgroundColor: secondaryColor,
           style: darkMode ? 'light' : 'dark',
         },
       },

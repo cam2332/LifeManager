@@ -1,4 +1,7 @@
 export let darkMode = false;
+export function SetDarkMode(isDark) {
+  darkMode = isDark;
+}
 export const Colors = {
   Blue: {
     Normal: '#0788D9',
@@ -36,14 +39,29 @@ export const Colors = {
 export const BLACK = '#151515';
 export const WHITE = '#FAFAFA';
 export const LIGHT_GREY = '#efefef';
-export const PRIMARY_COLOR = Colors.Blue.Normal;
-export const PRIMARY_DARK_COLOR = Colors.Blue.Dark;
-export const SECONDARY_COLOR = darkMode ? BLACK : WHITE;
-export const SECONDARY_NEGATIVE_COLOR = darkMode ? WHITE : BLACK;
+export let primaryColor = Colors.Blue.Normal;
+export function SetPrimaryColor(color) {
+  primaryColor = color;
+}
+export let primaryDarkColor = Colors.Blue.Dark;
+export function SetPrimaryDarkColor(color) {
+  primaryDarkColor = color;
+}
+export function UpdateColors() {
+  secondaryColor = darkMode ? BLACK : WHITE;
+  secondaryNegativeColor = darkMode ? WHITE : BLACK;
+  secondaryOneFourthColor = darkMode ? '#bfbfbf' : '#383838';
+  secondaryThreeFourthColor = darkMode ? '#383838' : '#bfbfbf';
+  dialogBackgroundColor = darkMode
+    ? 'rgba(20, 20, 20, 0.75)'
+    : 'rgba(0, 0, 0, 0.5)';
+}
+export let secondaryColor = darkMode ? BLACK : WHITE;
+export let secondaryNegativeColor = darkMode ? WHITE : BLACK;
 export const SECONDARY_HALF_COLOR = '#808080';
-export const SECONDARY_ONE_FOURTH_COLOR = darkMode ? '#bfbfbf' : '#383838';
-export const SECONDARY_THREE_FOURTH_COLOR = darkMode ? '#383838' : '#bfbfbf';
-export const DIALOG_BACKGROUND_COLOR = darkMode
-  ? 'rgba(0, 0, 0, 0.45)'
-  : 'rgba(0, 0, 0, 0.7)';
+export let secondaryOneFourthColor = darkMode ? '#bfbfbf' : '#383838';
+export let secondaryThreeFourthColor = darkMode ? '#383838' : '#bfbfbf';
+export let dialogBackgroundColor = darkMode
+  ? 'rgba(20, 20, 20, 0.75)'
+  : 'rgba(0, 0, 0, 0.5)';
 
