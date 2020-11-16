@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   StyleSheet,
   View,
@@ -9,28 +9,67 @@ import {
 } from 'react-native';
 import {
   darkMode,
-  PRIMARY_COLOR,
-  SECONDARY_COLOR,
-  SECONDARY_NEGATIVE_COLOR,
+  primaryColor,
+  secondaryColor,
+  secondaryNegativeColor,
   SECONDARY_HALF_COLOR,
+  secondaryThreeFourthColor,
 } from '../AppConfig';
 import {SetRegisterRoot} from '../NavigationHelperFunctions';
 import LogoIcon from '../../resources/LogoIcon.png';
-
-const OnPressLogin = (a, b) => {
-  console.log(a, b);
-};
+import * as UserApi from '../services/UserApi';
+import SnackBar from '../components/SnackBar';
+import CustomTextInput from '../components/CustomTextInput';
+import * as NavigationHelperFunctions from '../NavigationHelperFunctions';
 
 const onPressGoToRegisterScreen = () => {
-  SetRegisterRoot();
+  NavigationHelperFunctions.SetRegisterRoot();
 };
 
-const LoginScreen = () => {
+const LoginScreen = (props) => {
   const [loginText, setLoginText] = useState('');
   const [passwordText, setPasswordText] = useState('');
+  const [isFormValid, setIsFormValid] = useState(false);
+  const loginInputRef = useRef();
+  const passwordInputRef = useRef();
+  const snackBarRef = useRef();
 
-  const AllFieldsFilled = () => {
-    return loginText !== '' && passwordText !== '';
+  useEffect(() => {
+    NavigationHelperFunctions.UpdateStatusBarColor(
+      props.componentId,
+      secondaryColor,
+    );
+    NavigationHelperFunctions.SetCurrentScreenId(props.componentId);
+  });
+
+  useEffect(() => {
+    setIsFormValid(
+      loginText !== '' &&
+        passwordText !== '' &&
+        !loginInputRef.current.hasError() &&
+        !passwordInputRef.current.hasError(),
+    );
+  }, [loginText, passwordText]);
+
+  const OnPressLogin = () => {
+    UserApi.LoginUser(loginText, passwordText)
+      .then(() => {
+        console.log('login success');
+        NavigationHelperFunctions.SetNoteRoot();
+      })
+      .catch((error) => {
+        if (error) {
+          snackBarRef.current.ShowSnackBar(error?.message, 2000, false);
+          if (error.additionalInfo === 'password') {
+            passwordInputRef.current.setErrorValue(true, 'Nieprawidłowe hasło');
+          } else if (error.additionalInfo === '') {
+            loginInputRef.current.setErrorValue(
+              true,
+              'Nazwa użytkownika lub email w użyciu',
+            );
+          }
+        }
+      });
   };
 
   return (
@@ -43,42 +82,79 @@ const LoginScreen = () => {
       </View>
       <View style={{flex: 0.25}} />
       <View style={styles.sectionBody}>
-        <TextInput
-          style={styles.textInput}
-          color={SECONDARY_NEGATIVE_COLOR}
-          underlineColorAndroid={'#c4c4c4'}
+        <CustomTextInput
+          ref={loginInputRef}
+          viewStyle={styles.textInput}
+          color={secondaryNegativeColor}
+          underlineColorAndroid={secondaryThreeFourthColor}
           placeholder={'Nazwa użytkownika / Email'}
           placeholderTextColor={SECONDARY_HALF_COLOR}
+          inputText={loginText}
           onChangeText={(text) => setLoginText(text)}
+          onKeyPress={({nativeEvent}) => {
+            if (nativeEvent.key === 'Backspace') {
+              loginText.length === 0
+                ? loginInputRef.current.setErrorValue(true, 'Wprowadź nazwę')
+                : loginInputRef.current.setErrorValue(false, '');
+            }
+          }}
         />
-        <TextInput
-          style={styles.textInput}
-          color={SECONDARY_NEGATIVE_COLOR}
-          underlineColorAndroid={'#c4c4c4'}
+        <CustomTextInput
+          ref={passwordInputRef}
+          viewStyle={styles.textInput}
+          color={secondaryNegativeColor}
+          underlineColorAndroid={secondaryThreeFourthColor}
           placeholder={'Hasło'}
           placeholderTextColor={SECONDARY_HALF_COLOR}
-          onChangeText={(text) => setPasswordText(text)}
+          inputText={passwordText}
+          onChangeText={(text) => {
+            setPasswordText(text);
+            text.length < 6
+              ? passwordInputRef.current.setErrorValue(
+                  true,
+                  'Długość hasła powinna wynosić minimum 6 znaków',
+                )
+              : passwordInputRef.current.setErrorValue(false, '');
+          }}
+          onKeyPress={({nativeEvent}) => {
+            if (nativeEvent.key === 'Backspace') {
+              passwordText.length === 0
+                ? passwordInputRef.current.setErrorValue(true, 'Wprowadź hasło')
+                : passwordInputRef.current.setErrorValue(false, '');
+              passwordText.length < 6
+                ? passwordInputRef.current.setErrorValue(
+                    true,
+                    'Długość hasła powinna wynosić minimum 6 znaków',
+                  )
+                : passwordInputRef.current.setErrorValue(false, '');
+            }
+          }}
           secureTextEntry={true}
         />
         <TouchableOpacity
           style={[
             styles.loginButton,
             {
-              backgroundColor: AllFieldsFilled
-                ? PRIMARY_COLOR
-                : SECONDARY_COLOR,
+              backgroundColor: isFormValid
+                ? primaryColor
+                : darkMode
+                ? secondaryThreeFourthColor
+                : SECONDARY_HALF_COLOR,
             },
           ]}
-          onPress={() => OnPressLogin(loginText, passwordText)}>
+          disabled={!isFormValid}
+          onPress={() => OnPressLogin()}>
           <Text
             style={[
               styles.loginButtonText,
               {
-                color: AllFieldsFilled
+                color: isFormValid
                   ? darkMode
-                    ? SECONDARY_NEGATIVE_COLOR
-                    : SECONDARY_COLOR
-                  : PRIMARY_COLOR,
+                    ? secondaryNegativeColor
+                    : secondaryColor
+                  : darkMode
+                  ? SECONDARY_HALF_COLOR
+                  : secondaryThreeFourthColor,
               },
             ]}>
             Zaloguj się
@@ -93,6 +169,7 @@ const LoginScreen = () => {
           </View>
         </TouchableOpacity>
       </View>
+      <SnackBar ref={snackBarRef} />
     </View>
   );
 };
@@ -100,24 +177,24 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: SECONDARY_COLOR,
+    backgroundColor: secondaryColor,
   },
   sectionLogo: {
     alignItems: 'center',
     flex: 0.4,
-    backgroundColor: SECONDARY_COLOR,
+    backgroundColor: secondaryColor,
     justifyContent: 'center',
   },
   sectionTitle: {
-    flex: 0.2,
-    backgroundColor: SECONDARY_COLOR,
+    flex: 0.15,
+    backgroundColor: secondaryColor,
   },
   image: {
     resizeMode: 'contain',
     flex: 0.6,
   },
   loginText: {
-    color: PRIMARY_COLOR,
+    color: primaryColor,
     fontSize: 44,
     alignSelf: 'center',
     marginVertical: 2,
@@ -129,8 +206,6 @@ const styles = StyleSheet.create({
     width: '65%',
     paddingHorizontal: 24,
     paddingVertical: 6,
-    borderColor: PRIMARY_COLOR,
-    borderWidth: 1,
   },
   loginButtonText: {
     fontSize: 18,
@@ -142,9 +217,9 @@ const styles = StyleSheet.create({
     width: '65%',
   },
   sectionBody: {
-    flex: 0.4,
+    flex: 0.45,
     justifyContent: 'space-around',
-    backgroundColor: SECONDARY_COLOR,
+    backgroundColor: secondaryColor,
     paddingBottom: 40,
   },
   sectionRegisterHint: {
@@ -160,12 +235,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   registerHintText: {
-    color: PRIMARY_COLOR,
+    color: primaryColor,
     fontSize: 18,
     alignSelf: 'center',
   },
   registerHintBoldText: {
-    color: PRIMARY_COLOR,
+    color: primaryColor,
     fontSize: 18,
     alignSelf: 'center',
     fontWeight: 'bold',
