@@ -188,6 +188,9 @@ const ScreenHeader = (props) => {
           {props.leftCustomButton &&
             props.leftCustomButtonVisible &&
             leftCustomButton(props.leftCustomButton.iconName, iconsColor)}
+          {!props.leftCustomButtonVisible && !sideMenuButtonVisible && (
+            <View style={styles.leftCustomButtonMainContainer} />
+          )}
           {title(
             props.titleFontSize,
             props.titleAlignment,
