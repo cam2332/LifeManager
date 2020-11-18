@@ -1,13 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  TextInput,
-  KeyboardAvoidingView,
-} from 'react-native';
+import {StyleSheet, View, Text, Image, TouchableOpacity} from 'react-native';
 import {
   darkMode,
   primaryColor,
@@ -21,6 +13,8 @@ import * as UserApi from '../services/UserApi';
 import SnackBar from '../components/SnackBar';
 import CustomTextInput from '../components/CustomTextInput';
 import * as NavigationHelperFunctions from '../NavigationHelperFunctions';
+import ScreenHeader from '../components/ScreenHeader';
+import * as SettingsApi from '../services/SettingsApi';
 
 const OnPressGoToLoginScreen = () => {
   NavigationHelperFunctions.SetLoginRoot();
@@ -95,6 +89,22 @@ const RegisterScreen = (props) => {
 
   return (
     <View style={styles.mainContainer}>
+      <ScreenHeader
+        backgroundColor={secondaryColor}
+        title={'Pomiń'}
+        titleAlignment={'flex-end'}
+        titleFontSize={20}
+        textColor={darkMode ? secondaryNegativeColor : primaryColor}
+        rightCustomButtonVisible={true}
+        rightCustomButton={{
+          iconName: 'arrow-forward-sharp',
+          onPress: () => {
+            SettingsApi.SetIsOfflineMode(true);
+            NavigationHelperFunctions.SetNoteRoot();
+          },
+        }}
+        iconsColor={darkMode ? secondaryNegativeColor : primaryColor}
+      />
       <View style={styles.sectionLogo}>
         <Image style={styles.image} source={LogoIcon} />
       </View>
