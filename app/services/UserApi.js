@@ -1,6 +1,5 @@
 import {serverAddress} from '../AppConfig';
-import PouchDB from 'pouchdb-react-native';
-const db = new PouchDB('mydb');
+import * as SettingsApi from './SettingsApi';
 
 export const RegisterUser = async (login, email, password) => {
   return new Promise((resolve, reject) => {
@@ -48,15 +47,15 @@ export const LoginUser = async (login, password) => {
         const data = response.json();
         return Promise.all([statusCode, data]);
       })
-      .then(([statusCode, data]) => {
+      .then(async ([statusCode, data]) => {
         if (statusCode === 200) {
-          db.post({token: data.token}, (err, res) => {
-            if (!err) {
-              resolve();
-            } else {
-              reject();
-            }
-          });
+          try {
+            await SettingsApi.SetAccessToken(data.token);
+            await SettingsApi.SetUserData(data.user);
+            resolve();
+          } catch (err) {
+            reject();
+          }
         } else if (statusCode === 401) {
           reject(data);
         }
