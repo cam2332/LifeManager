@@ -136,7 +136,7 @@ const ScreenHeader = (props) => {
       ]}>
       <TextInput
         ref={textInputRef}
-        style={styles.searchBarTextInput}
+        style={[styles.searchBarTextInput, {color: props.textColor}]}
         placeholder={searchBarTextPlaceholder}
         placeholderTextColor={SECONDARY_HALF_COLOR}
         onChangeText={(text) => OnChangeSearchText(text)}
@@ -148,7 +148,7 @@ const ScreenHeader = (props) => {
         <Icon
           style={styles.searchBarCancelButtonIcon}
           name="close-sharp"
-          color="#888"
+          color={props.iconsColor}
           size={21}
         />
       </TouchableOpacity>
@@ -188,9 +188,11 @@ const ScreenHeader = (props) => {
           {props.leftCustomButton &&
             props.leftCustomButtonVisible &&
             leftCustomButton(props.leftCustomButton.iconName, iconsColor)}
-          {!props.leftCustomButtonVisible && !sideMenuButtonVisible && (
-            <View style={styles.leftCustomButtonMainContainer} />
-          )}
+          {!props.leftCustomButtonVisible &&
+            !sideMenuButtonVisible &&
+            !props.backButtonVisible && (
+              <View style={styles.leftCustomButtonMainContainer} />
+            )}
           {title(
             props.titleFontSize,
             props.titleAlignment,
@@ -281,7 +283,6 @@ const styles = StyleSheet.create({
   },
   searchBarTextInput: {
     marginLeft: 8,
-    color: secondaryNegativeColor,
     flex: 1,
     fontSize: 16,
   },
