@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import {TouchableOpacity, View, Text, StyleSheet} from 'react-native';
 import {secondaryNegativeColor, SECONDARY_HALF_COLOR} from '../AppConfig';
+import {NthIndexOfString} from '../HelperFunctions';
 
 const NoteCard = (props) => {
-  const defaultBackgroundColor =
-    props.note.color || props.backgroundColor || SECONDARY_HALF_COLOR;
+  const defaultBackgroundColor = props.note.color;
   const defaultTitleColor = props.titleColor || secondaryNegativeColor;
   const defaultTextColor = props.textColor || secondaryNegativeColor;
   const defaultBorderColor =
@@ -64,6 +64,11 @@ const NoteCard = (props) => {
           {props.note.text
             ? props.note.text.length > 140
               ? props.note.text.substring(0, 140) + '...'
+              : (props.note.text.match(/\n/g) || []).length > 5
+              ? props.note.text.substring(
+                  0,
+                  NthIndexOfString(props.note.text, '\n', 5),
+                ) + '...'
               : props.note.text
             : ''}
         </Text>
@@ -80,7 +85,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 10,
     borderWidth: 3,
-    borderRadius: 7,
+    borderRadius: 2,
   },
   innerContainer: {
     flex: 1,
