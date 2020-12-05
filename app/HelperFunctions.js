@@ -18,3 +18,14 @@ export function RandomString(length) {
   }
   return result;
 }
+
+export function ChunkArray(inputArray, itemsInChunk) {
+  return inputArray.reduce((resultArray, item, index) => {
+    const chunkIndex = Math.floor(index / itemsInChunk);
+    if (!resultArray[chunkIndex]) {
+      resultArray[chunkIndex] = [];
+    }
+    resultArray[chunkIndex].push(item);
+    return resultArray;
+  }, []);
+}
