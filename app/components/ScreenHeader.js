@@ -156,7 +156,13 @@ const ScreenHeader = (props) => {
   );
 
   const title = (titleFontSize, titleAlignment, textColor, textTitle) => (
-    <View style={styles.titleMainContainer}>
+    <View
+      style={[
+        styles.titleMainContainer,
+        props.rightCustomView && props.rightCustomViewVisible
+          ? {flex: 0.6}
+          : {flex: 0.7},
+      ]}>
       <Text
         style={{
           fontSize: titleFontSize || 25,
@@ -202,6 +208,11 @@ const ScreenHeader = (props) => {
           {searchButtonVisible &&
             !props.rightCustomButtonVisible &&
             searchButton(iconsColor)}
+          {props.rightCustomView && props.rightCustomViewVisible && (
+            <View style={styles.rightCustomViewMainContainer}>
+              {props.rightCustomView}
+            </View>
+          )}
           {props.rightCustomButton &&
             props.rightCustomButtonVisible &&
             rightCustomButton(props.rightCustomButton.iconName, iconsColor)}
@@ -271,6 +282,10 @@ const styles = StyleSheet.create({
     flex: 0.15,
     justifyContent: 'center',
   },
+  rightCustomViewMainContainer: {
+    flex: 0.1,
+    justifyContent: 'center',
+  },
   rightCustomButtonIcon: {
     alignSelf: 'flex-end',
     paddingHorizontal: 20,
@@ -295,7 +310,6 @@ const styles = StyleSheet.create({
     padding: 7,
   },
   titleMainContainer: {
-    flex: 0.7,
     justifyContent: 'center',
     paddingHorizontal: 10,
   },
