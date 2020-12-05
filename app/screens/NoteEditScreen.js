@@ -7,6 +7,7 @@ import {
   Text,
   StyleSheet,
   BackHandler,
+  TouchableOpacity,
 } from 'react-native';
 import {
   darkMode,
@@ -23,9 +24,10 @@ import ScreenHeader from '../components/ScreenHeader';
 import ConfirmDialog from '../components/dialogs/ConfirmDialog';
 import SnackBar from '../components/SnackBar';
 import * as NoteApi from '../services/NoteApi';
+import ColorSelectorDialog from '../components/dialogs/ColorSelectorDialog';
 
 const NoteEditScreen = (props) => {
-  const [id, setId] = useState(props.note.id || '');
+  const [id, setId] = useState(props.note.id);
   const [title, setTitle] = useState(props.note.title || '');
   const [text, setText] = useState(props.note.text || '');
   const [createDate, setCreateDate] = useState(
@@ -34,11 +36,15 @@ const NoteEditScreen = (props) => {
   const [lastEditDate, setLastEditDate] = useState(
     props.note.lastEditDate || new Date(),
   );
+  const [color, setColor] = useState(props.note.color || primaryColor);
   const [editingText, setEditingText] = useState(false);
   const [
     deleteNoteConfirmDialogVisible,
     setDeleteNoteConfirmDialogVisible,
   ] = useState(false);
+  const [colorSelectorDialogVisible, setColorSelectorDialogVisible] = useState(
+    false,
+  );
   const snackBarRef = useRef();
 
   const noteTitleInputRef = useRef();
@@ -49,13 +55,13 @@ const NoteEditScreen = (props) => {
   useEffect(() => {
     NavigationHelperFunctions.UpdateStatusBarColor(
       NavigationHelperFunctions.NOTE_EDIT_SCREEN_ID,
-      deleteNoteConfirmDialogVisible
+      colorSelectorDialogVisible || deleteNoteConfirmDialogVisible
         ? darkMode
           ? secondaryColor
           : dialogBackgroundColor
         : secondaryColor,
     );
-  }, [deleteNoteConfirmDialogVisible]);
+  }, [deleteNoteConfirmDialogVisible, colorSelectorDialogVisible]);
 
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', OnPressBack);
@@ -70,65 +76,87 @@ const NoteEditScreen = (props) => {
       text,
       createDate,
       lastEditDate,
+      color,
     });
   };
 
   const TitleInputEndEditing = () => {
-    NoteApi.ChangeNoteTitle(id, title)
-      .then(
-        ({
-          id: newId,
-          createDate: newCreateDate,
-          lastEditDate: newLastEditDate,
-        }) => {
-          newId && setId(newId);
-          newCreateDate && setCreateDate(newCreateDate);
-          newLastEditDate && setLastEditDate(newLastEditDate);
+    if (id === null || id === undefined || id.length === 0) {
+      NoteApi.CreateNote({title: title, text: text})
+        .then((createdNote) => {
+          setId(createdNote.id);
+          setCreateDate(createdNote.createDate);
+          setLastEditDate(createdNote.lastEditDate);
+        })
+        .catch((error) => {
+          snackBarRef.current.ShowSnackBar(error?.message, 2000, false);
+        });
+    } else {
+      NoteApi.ChangeNoteTitle(id, title)
+        .then(() => {
+          setLastEditDate(new Date());
           //noteTextInputRef.current.focus();
-        },
-      )
-      .catch((oldTitle) => {
-        setTitle(oldTitle);
-        ShowSnackBar(
-          'Wystąpił błąd podczas zmiany tytułu notatki.',
-          2000,
-          false,
-        );
-      });
+        })
+        .catch((error) => {
+          snackBarRef.current.ShowSnackBar(error?.message, 2000, false);
+        });
+    }
   };
+
   const TextInputStartEditing = () => {
     setEditingText(true);
   };
+
   const TextInputEndEditing = () => {
     setEditingText(false);
   };
+
   const OnApplyTextChange = () => {
-    NoteApi.ChangeNoteText(id, text)
-      .then(
-        ({
-          id: newId,
-          createDate: newCreateDate,
-          lastEditDate: newLastEditDate,
-        }) => {
-          newId && setId(newId);
-          newCreateDate && setCreateDate(newCreateDate);
-          newLastEditDate && setLastEditDate(newLastEditDate);
+    if (id === null || id === undefined || id.length === 0) {
+      NoteApi.CreateNote({title: title, text: text})
+        .then((createdNote) => {
+          setId(createdNote.id);
+          setCreateDate(createdNote.createDate);
+          setLastEditDate(createdNote.lastEditDate);
           noteTextInputRef.current.blur();
-        },
-      )
-      .catch((oldText) => {
-        noteTextInputRef.current.blur();
-        setText(oldText);
-        ShowSnackBar(
-          'Wystąpił błąd podczas zmiany treści notatki.',
-          2000,
-          false,
-        );
-      });
+        })
+        .catch((error) => {
+          noteTextInputRef.current.blur();
+          snackBarRef.current.ShowSnackBar(error?.message, 2000, false);
+        });
+    } else {
+      NoteApi.ChangeNoteText(id, text)
+        .then(() => {
+          setLastEditDate(new Date());
+          noteTextInputRef.current.blur();
+        })
+        .catch((error) => {
+          noteTextInputRef.current.blur();
+          snackBarRef.current.ShowSnackBar(error?.message, 2000, false);
+        });
+    }
   };
+
+  const OnSelectColor = (newColor) => {
+    if (id === undefined) {
+      setColor(newColor);
+    } else {
+      NoteApi.ChangeNoteColor(id, newColor)
+        .then(() => {
+          setColor(newColor);
+          setLastEditDate(new Date());
+          setColorSelectorDialogVisible(false);
+        })
+        .catch((error) => {
+          snackBarRef.current.ShowSnackBar(error?.message, 2000, false);
+        });
+    }
+  };
+
   const DeleteNote = () => {
     setDeleteNoteConfirmDialogVisible(true);
   };
+
   const ConfirmDeleteNote = () => {
     setDeleteNoteConfirmDialogVisible(false);
     NoteApi.DeleteNote(id)
@@ -138,31 +166,17 @@ const NoteEditScreen = (props) => {
         );
         props.OnDeleteNote(id);
       })
-      .catch(() => {
-        ShowSnackBar('Wystąpił błąd podczas usuwania notatki.', 2000, false);
+      .catch((error) => {
+        snackBarRef.current.ShowSnackBar(error?.message, 2000, false);
       });
   };
 
-  const ShowSnackBar = (
-    description,
-    duration,
-    buttonVisible = false,
-    buttonText = '',
-  ) => {
-    snackBarRef.current.ShowSnackBar(
-      description,
-      duration,
-      buttonText,
-      buttonVisible,
-    );
-  };
-
   return (
-    <View style={styles.mainContainer}>
+    <View style={[styles.mainContainer, {backgroundColor: secondaryColor}]}>
       <ScreenHeader
-        iconsColor={darkMode ? SECONDARY_HALF_COLOR : primaryColor}
+        iconsColor={color}
         backgroundColor={secondaryColor}
-        borderColor={darkMode ? primaryDarkColor : primaryColor}
+        borderColor={secondaryColor}
         OnPressBack={OnPressBack}
         backButtonVisible={!editingText}
         rightCustomButton={{
@@ -177,33 +191,45 @@ const NoteEditScreen = (props) => {
           onPress: OnApplyTextChange,
         }}
         leftCustomButtonVisible={editingText}
+        rightCustomView={
+          <TouchableOpacity
+            style={[styles.colorButton, {backgroundColor: color}]}
+            onPress={() => setColorSelectorDialogVisible(true)}
+          />
+        }
+        rightCustomViewVisible={true}
         stackId={NavigationHelperFunctions.NOTE_STACK_ID}
       />
       <View style={styles.noteContainer}>
         <TextInput
           ref={noteTitleInputRef}
-          style={styles.titleTextInput}
+          style={[styles.titleTextInput, {color: color}]}
           defaultValue={title}
           placeholder={'Tytuł notatki'}
           placeholderTextColor={SECONDARY_HALF_COLOR}
           onChangeText={(newText) => setTitle(newText)}
           onEndEditing={TitleInputEndEditing}
         />
-        <ScrollView style={styles.textScrollView}>
-          <KeyboardAvoidingView behavior={'height'}>
-            <TextInput
-              ref={noteTextInputRef}
-              style={styles.textInput}
-              defaultValue={text}
-              placeholder={'Treść notatki'}
-              placeholderTextColor={SECONDARY_HALF_COLOR}
-              multiline={true}
-              onChangeText={(newText) => setText(newText)}
-              onFocus={() => TextInputStartEditing()}
-              onEndEditing={() => TextInputEndEditing()}
-            />
-          </KeyboardAvoidingView>
-        </ScrollView>
+        <TouchableOpacity
+          activeOpacity={0.9}
+          style={styles.textTouchableOpacity}
+          onPress={() => noteTextInputRef && noteTextInputRef.current.focus()}>
+          <ScrollView style={styles.textScrollView}>
+            <KeyboardAvoidingView>
+              <TextInput
+                ref={noteTextInputRef}
+                style={styles.textInput}
+                defaultValue={text}
+                placeholder={'Treść notatki'}
+                placeholderTextColor={SECONDARY_HALF_COLOR}
+                multiline={true}
+                onChangeText={(newText) => setText(newText)}
+                onFocus={() => TextInputStartEditing()}
+                onEndEditing={() => TextInputEndEditing()}
+              />
+            </KeyboardAvoidingView>
+          </ScrollView>
+        </TouchableOpacity>
       </View>
       <View style={styles.dateContainer}>
         <Text style={styles.createDateText}>
@@ -229,6 +255,16 @@ const NoteEditScreen = (props) => {
           setDeleteNoteConfirmDialogVisible(false);
         }}
       />
+      <ColorSelectorDialog
+        visible={colorSelectorDialogVisible}
+        selectedColor={color}
+        OnSelectColor={(newColor) => {
+          OnSelectColor(newColor);
+        }}
+        OnPressExit={() => {
+          setColorSelectorDialogVisible(false);
+        }}
+      />
       <SnackBar ref={snackBarRef} />
     </View>
   );
@@ -237,19 +273,21 @@ const NoteEditScreen = (props) => {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: secondaryColor,
   },
   noteContainer: {
     flex: 1,
   },
   titleTextInput: {
     fontSize: 28,
-    marginHorizontal: 45,
+    marginHorizontal: 40,
     color: secondaryNegativeColor,
+  },
+  textTouchableOpacity: {
+    flex: 1,
   },
   textScrollView: {
     marginVertical: 10,
-    paddingHorizontal: 45,
+    paddingHorizontal: 40,
   },
   textInput: {
     marginBottom: 30,
@@ -272,6 +310,12 @@ const styles = StyleSheet.create({
     fontSize: 11,
     textAlign: 'center',
     color: SECONDARY_HALF_COLOR,
+  },
+  colorButton: {
+    height: 30,
+    width: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
