@@ -6,7 +6,7 @@ export const SetAccessToken = async (token) => {
     await settingsDB.put(
       {
         _rev: '1',
-        _id: 'access_token',
+        _id: 'accessToken',
         date: new Date(),
         token: token,
       },
@@ -19,15 +19,24 @@ export const SetAccessToken = async (token) => {
 
 export const GetAccessToken = async () => {
   try {
-    const token = await settingsDB.get('access_token');
+    const token = await settingsDB.get('accessToken');
     return token.token;
   } catch (err) {
     console.log('get access token failed', err);
+    return undefined;
   }
 };
 
-export const DeleteAccessToken = () => {
-  settingsDB.destroy();
+export const DeleteAccessToken = async () => {
+  try {
+    const token = await settingsDB.get('accessToken');
+    token._deleted = true;
+    await settingsDB.put(token);
+    return true;
+  } catch (err) {
+    console.log('delete access token failed', err);
+    return false;
+  }
 };
 
 export const SetUserData = async (user) => {
@@ -57,15 +66,34 @@ export const GetUserData = async () => {
     return userData;
   } catch (err) {
     console.log('get user data failed', err);
+    return undefined;
+  }
+};
+
+export const DeleteUserData = async () => {
+  try {
+    const userData = await settingsDB.get('userData');
+    userData._deleted = true;
+    await settingsDB.put(userData);
+    return true;
+  } catch (err) {
+    console.log('delete user data failed', err);
+    return false;
   }
 };
 
 export const SetIsOfflineMode = async (isOffline) => {
   try {
-    await settingsDB.put(
-      {_rev: '1', _id: 'offlineMode', value: isOffline},
-      {force: true},
-    );
+    try {
+      const isOfflineMode = await settingsDB.get('offlineMode');
+      isOfflineMode.value = isOffline;
+      await settingsDB.put(isOfflineMode);
+    } catch (err) {
+      await settingsDB.put(
+        {_rev: '1', _id: 'offlineMode', value: isOffline},
+        {force: true},
+      );
+    }
   } catch (err) {
     console.log('set offline mode failed', err);
   }
@@ -74,10 +102,93 @@ export const SetIsOfflineMode = async (isOffline) => {
 export const GetIsOfflineMode = async () => {
   try {
     const isOfflineMode = await settingsDB.get('offlineMode');
-    delete isOfflineMode._id;
-    delete isOfflineMode._rev;
-    return isOfflineMode;
+    return isOfflineMode.value;
   } catch (err) {
     console.log('get is offline mode failed', err);
+    return false;
+  }
+};
+
+export const SetIsAutoSync = async (isAutoSync) => {
+  try {
+    try {
+      const isAuto = await settingsDB.get('autoSync');
+      isAuto.value = isAutoSync;
+      await settingsDB.put(isAuto);
+    } catch (err) {
+      await settingsDB.put(
+        {_rev: '1', _id: 'autoSync', value: isAutoSync},
+        {force: true},
+      );
+    }
+  } catch (err) {
+    console.log('set AutoSync failed', err);
+  }
+};
+
+export const GetIsAutoSync = async () => {
+  try {
+    const isAutoSync = await settingsDB.get('autoSync');
+    return isAutoSync.value;
+  } catch (err) {
+    console.log('get is AutoSync failed', err);
+    return true;
+  }
+};
+
+export const SetPrimaryColor = async (primaryColor) => {
+  try {
+    try {
+      const color = await settingsDB.get('primaryColor');
+      color.value = primaryColor;
+      await settingsDB.put(color);
+    } catch (err) {
+      await settingsDB.put(
+        {_rev: '1', _id: 'primaryColor', value: primaryColor},
+        {force: true},
+      );
+    }
+  } catch (err) {
+    console.log('set primary color failed', err);
+  }
+};
+
+export const GetPrimaryColor = async () => {
+  try {
+    const primaryColor = await settingsDB.get('primaryColor');
+    return primaryColor.value;
+  } catch (err) {
+    console.log('get primary color failed', err);
+    return undefined;
+  }
+};
+
+export const SetIsDarkMode = async (darkMode) => {
+  try {
+    try {
+      const dark = await settingsDB.get('darkMode');
+      dark.value = darkMode;
+      await settingsDB.put(dark);
+    } catch (err) {
+      await settingsDB.put(
+        {_rev: '1', _id: 'darkMode', value: darkMode},
+        {force: true},
+      );
+    }
+  } catch (err) {
+    console.log('set darkMode failed', err);
+  }
+};
+
+export const GetIsDarkMode = async () => {
+  try {
+    const darkMode = await settingsDB.get('darkMode');
+    return darkMode.value;
+  } catch (err) {
+    console.log('get darkMode failed', err);
+    return false;
+  }
+};
+
   }
 };
