@@ -6,7 +6,6 @@ import {
   ScrollView,
   Switch,
   TouchableOpacity,
-  FlatList,
 } from 'react-native';
 import {
   BLACK,
@@ -26,16 +25,31 @@ import {
 } from '../AppConfig';
 import ScreenHeader from '../components/ScreenHeader';
 import * as NavigationHelperFunctions from '../NavigationHelperFunctions';
+import * as SettingsApi from '../services/SettingsApi';
+import * as UserApi from '../services/UserApi';
 
 const SettingsScreen = (props) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [localPrimaryColor, setPrimaryColor] = useState({
     Normal: primaryColor,
     Dark: primaryDarkColor,
   });
   const [isDarkMode, setDarkMode] = useState(darkMode);
   const [offlineMode, setOfflineMode] = useState(false);
-  const [automaticSync, setAutomaticSync] = useState(true);
+  const [autoSync, setAutoSync] = useState(true);
+  const UpdateUserStatus = async () => {
+    setIsLoggedIn(
+      (await SettingsApi.GetAccessToken()) && (await SettingsApi.GetUserData()),
+    );
+  };
+
+  const UpdateOfflineMode = async () => {
+    setOfflineMode(await SettingsApi.GetIsOfflineMode());
+  };
+
+  const UpdateAutoSync = async () => {
+    setAutoSync(await SettingsApi.GetIsAutoSync());
+  };
 
   useEffect(() => {
     NavigationHelperFunctions.UpdateStatusBarColor(
@@ -43,7 +57,28 @@ const SettingsScreen = (props) => {
       secondaryColor,
     );
     NavigationHelperFunctions.SetCurrentScreenId(props.componentId);
-  });
+
+    UpdateUserStatus();
+    UpdateOfflineMode();
+    UpdateAutoSync();
+  }, []);
+
+  const OnPressLogin = () => {
+    NavigationHelperFunctions.SetLoginRoot();
+  };
+
+  const OnPressLogout = () => {
+    UserApi.LogoutUser()
+      .then(async () => {
+        await UserApi.ClearUserTokenAndGoToLoginScreen();
+      })
+      .catch((error) => {
+        console.log('Error occurred while trying to logout.', error);
+        // TODO: Handle error here
+      });
+  };
+
+  const Synchronize = () => {};
 
   const optionTextStyle = StyleSheet.flatten([
     styles.optionText,
@@ -78,9 +113,9 @@ const SettingsScreen = (props) => {
     <View style={mainContainerStyle}>
       <ScreenHeader
         title="Ustawienia"
-        textColor={darkMode ? secondaryNegativeColor : primaryColor}
-        iconsColor={darkMode ? secondaryNegativeColor : primaryColor}
-        backgroundColor={darkMode ? secondaryThreeFourthColor : secondaryColor}
+        textColor={darkMode ? secondaryNegativeColor : secondaryColor}
+        iconsColor={darkMode ? secondaryNegativeColor : secondaryColor}
+        backgroundColor={darkMode ? secondaryThreeFourthColor : primaryColor}
         borderColor={darkMode ? secondaryThreeFourthColor : primaryColor}
         sideMenuButtonVisible={true}
       />
@@ -103,7 +138,7 @@ const SettingsScreen = (props) => {
               <TouchableOpacity
                 style={logoutButtonStyle}
                 onPress={() => {
-                  setIsLoggedIn(false);
+                  OnPressLogout();
                 }}>
                 <Text style={styles.logoutButtonText}>Wyloguj</Text>
               </TouchableOpacity>
@@ -113,7 +148,7 @@ const SettingsScreen = (props) => {
             <TouchableOpacity
               style={logoutButtonStyle}
               onPress={() => {
-                setIsLoggedIn(true);
+                OnPressLogin();
               }}>
               <Text style={styles.logoutButtonText}>Zaloguj</Text>
             </TouchableOpacity>
@@ -128,13 +163,15 @@ const SettingsScreen = (props) => {
               <TouchableOpacity
                 key={name}
                 activeOpacity={0.9}
-                onPress={() => {
+                onPress={async () => {
                   SetPrimaryColor(color.Normal);
                   SetPrimaryDarkColor(color.Dark);
                   setPrimaryColor({
                     Normal: color.Normal,
                     Dark: color.Dark,
                   });
+                  await SettingsApi.SetPrimaryColor(color.Normal);
+                  NavigationHelperFunctions.SetSettingsRoot();
                 }}
                 style={[
                   styles.colorButtonBox,
@@ -165,10 +202,12 @@ const SettingsScreen = (props) => {
           <View style={styles.secondaryColorSelector}>
             <TouchableOpacity
               activeOpacity={0.9}
-              onPress={() => {
+              onPress={async () => {
                 SetDarkMode(false);
                 setDarkMode(false);
                 UpdateColors();
+                await SettingsApi.SetIsDarkMode(false);
+                NavigationHelperFunctions.SetSettingsRoot();
               }}
               style={[
                 styles.colorButtonBox,
@@ -184,10 +223,12 @@ const SettingsScreen = (props) => {
             />
             <TouchableOpacity
               activeOpacity={0.9}
-              onPress={() => {
+              onPress={async () => {
                 SetDarkMode(true);
                 setDarkMode(true);
                 UpdateColors();
+                await SettingsApi.SetIsDarkMode(true);
+                NavigationHelperFunctions.SetSettingsRoot();
               }}
               style={[
                 styles.colorButtonBox,
@@ -207,7 +248,11 @@ const SettingsScreen = (props) => {
         {isLoggedIn && (
           <View style={styles.section}>
             <Text style={sectionTitleStyle}>Synchronizacja</Text>
-            <TouchableOpacity style={styles.paddingVertical10}>
+            <TouchableOpacity
+              style={styles.paddingVertical10}
+              onPress={() => {
+                Synchronize();
+              }}>
               <Text style={optionTextStyle}>Synchronizuj</Text>
               <Text style={subOptionTextStyle}>
                 Ostatnia synchronizacja: {new Date().toLocaleString()}
@@ -217,7 +262,10 @@ const SettingsScreen = (props) => {
               <Text style={optionTextStyle}>Tryb offline</Text>
               <Switch
                 value={offlineMode}
-                onValueChange={setOfflineMode}
+                onValueChange={async (value) => {
+                  await SettingsApi.SetIsOfflineMode(value);
+                  setOfflineMode(value);
+                }}
                 trackColor={{
                   true: primaryColor,
                   false: secondaryThreeFourthColor,
@@ -228,8 +276,11 @@ const SettingsScreen = (props) => {
             <View style={styles.switchContainer}>
               <Text style={optionTextStyle}>Automatyczna synchronizacja</Text>
               <Switch
-                value={automaticSync}
-                onValueChange={setAutomaticSync}
+                value={autoSync}
+                onValueChange={async (value) => {
+                  SettingsApi.SetIsAutoSync(value);
+                  setAutoSync(value);
+                }}
                 trackColor={{
                   true: primaryColor,
                   false: secondaryThreeFourthColor,
