@@ -69,7 +69,7 @@ const NoteMainScreen = (props) => {
   };
 
   const UpdateListFromSearch = (text) => {
-    NoteApi.GetAllNotesByTitle(text)
+    NoteApi.GetNotesByTitleAndText(text)
       .then((notes) => {
         setNoteList(notes);
         setIsFetching(false);
@@ -144,18 +144,19 @@ const NoteMainScreen = (props) => {
       note,
       OnDeleteNote: (noteId) => OnDeleteNote(noteId),
       OnPressBack: (updatedNote) => {
-        const index = noteList.findIndex(
-          (note1) => note1.id === updatedNote.id,
-        );
-        console.log(index);
-        if (index > -1) {
-          noteList[index] = updatedNote;
+        if (Object.keys(note).length === 0) {
+          if (Object.keys(updatedNote).length > 0 && updatedNote.id) {
+            setNoteList([...noteList, updatedNote]);
+          }
         } else {
-          if (updatedNote.id !== '') {
-            noteList.push(updatedNote);
+          const index = noteList.findIndex(
+            (note1) => note1.id === updatedNote.id,
+          );
+          if (index > -1) {
+            noteList[index] = updatedNote;
+            setNoteList([...noteList]);
           }
         }
-        setNoteList([...noteList]);
       },
     });
   };
@@ -164,9 +165,9 @@ const NoteMainScreen = (props) => {
     <View style={styles.mainContainer}>
       <ScreenHeader
         title={selectMode ? selectedNoteList.length.toString() : 'Notatki'}
-        textColor={darkMode ? secondaryNegativeColor : primaryColor}
-        iconsColor={darkMode ? secondaryNegativeColor : primaryColor}
-        backgroundColor={darkMode ? secondaryThreeFourthColor : secondaryColor}
+        textColor={darkMode ? secondaryNegativeColor : secondaryColor}
+        iconsColor={darkMode ? secondaryNegativeColor : secondaryColor}
+        backgroundColor={darkMode ? secondaryThreeFourthColor : primaryColor}
         borderColor={darkMode ? secondaryThreeFourthColor : primaryColor}
         sideMenuButtonVisible={true}
         searchButtonVisible={!selectMode}
@@ -190,7 +191,6 @@ const NoteMainScreen = (props) => {
           renderItem={({item}) => (
             <NoteCard
               note={item}
-              onDeleteCard={() => deleteNoteFromList(item.id)}
               backgroundColor={darkMode ? primaryDarkColor : primaryColor}
               titleColor={darkMode ? secondaryNegativeColor : secondaryColor}
               textColor={darkMode ? secondaryNegativeColor : secondaryColor}
@@ -213,7 +213,7 @@ const NoteMainScreen = (props) => {
         />
       </View>
       <TouchableOpacity
-        style={styles.floatingButton}
+        style={[styles.floatingButton, {backgroundColor: primaryColor}]}
         onPress={() => (selectMode ? DeleteSelectedNotes() : AddNote())}>
         <Icon
           name={selectMode ? 'trash-sharp' : 'add-sharp'}
@@ -235,10 +235,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 17,
     right: 17,
-    backgroundColor: darkMode ? primaryDarkColor : primaryColor,
-    borderColor: darkMode ? secondaryNegativeColor : secondaryColor,
-    borderWidth: 2,
     borderRadius: 30,
+    elevation: 7,
   },
   listContainer: {
     flex: 1,
