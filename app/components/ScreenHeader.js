@@ -10,7 +10,11 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import SearchIcon from '../../resources/SearchIcon.png';
 import MenuIcon from '../../resources/MenuButton.png';
-import {secondaryNegativeColor, SECONDARY_HALF_COLOR} from '../AppConfig';
+import {
+  darkMode,
+  secondaryThreeFourthColor,
+  SECONDARY_HALF_COLOR,
+} from '../AppConfig';
 import * as NavigationHelperFunctions from '../NavigationHelperFunctions';
 
 const ScreenHeader = (props) => {
@@ -138,7 +142,9 @@ const ScreenHeader = (props) => {
         ref={textInputRef}
         style={[styles.searchBarTextInput, {color: props.textColor}]}
         placeholder={searchBarTextPlaceholder}
-        placeholderTextColor={SECONDARY_HALF_COLOR}
+        placeholderTextColor={
+          darkMode ? SECONDARY_HALF_COLOR : secondaryThreeFourthColor
+        }
         onChangeText={(text) => OnChangeSearchText(text)}
         onEndEditing={(event) => OnEndTypingSearch(inputText)}
       />
