@@ -23,7 +23,6 @@ const LocalCreateNote = async (note) => {
 
 const RemoteCreateNote = async (note) => {
   const token = await SettingsApi.GetAccessToken();
-  console.log('create note', note);
   return new Promise((resolve, reject) => {
     return fetch(serverAddress + 'note/', {
       method: 'POST',
@@ -87,13 +86,16 @@ const LocalChangeNoteTitle = async (noteId, newTitle) => {
 const RemoteChangeNoteTitle = async (noteId, newTitle) => {
   const token = await SettingsApi.GetAccessToken();
   return new Promise((resolve, reject) => {
-    return fetch(serverAddress + `note/${noteId}/title/${newTitle}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: token,
+    return fetch(
+      serverAddress + `note/${noteId}/title/${encodeURIComponent(newTitle)}`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token,
+        },
       },
-    })
+    )
       .then((response) => {
         const statusCode = response.status;
         return [statusCode, response];
@@ -147,16 +149,16 @@ const LocalChangeNoteText = async (noteId, newText) => {
 const RemoteChangeNoteText = async (noteId, newText) => {
   const token = await SettingsApi.GetAccessToken();
   return new Promise((resolve, reject) => {
-    return fetch(serverAddress + `note/${noteId}/text/`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: token,
+    return fetch(
+      serverAddress + `note/${noteId}/text/${encodeURIComponent(newText)}`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token,
+        },
       },
-      body: JSON.stringify({
-        text: newText,
-      }),
-    })
+    )
       .then((response) => {
         const statusCode = response.status;
         return [statusCode, response];
@@ -211,13 +213,16 @@ const LocalChangeNoteColor = async (noteId, newColor) => {
 const RemoteChangeNoteColor = async (noteId, newColor) => {
   const token = await SettingsApi.GetAccessToken();
   return new Promise((resolve, reject) => {
-    return fetch(serverAddress + `note/${noteId}/color/${newColor}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: token,
+    return fetch(
+      serverAddress + `note/${noteId}/color/${encodeURIComponent(newColor)}`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token,
+        },
       },
-    })
+    )
       .then((response) => {
         const statusCode = response.status;
         return [statusCode, response];
@@ -315,23 +320,19 @@ export const GetAllNotes = async () => {
 
 const LocalGetNotesByTitleAndText = async (text) => {
   const notes = await LocalGetAllNotes();
-  console.log('text', text);
-  console.log('notes', notes);
   return (
-    notes.filter((note) => {
-      console.log(note);
-      return (
+    notes.filter(
+      (note) =>
         note.title.toLowerCase().includes(text.toLowerCase()) ||
-        note.text.toLowerCase().includes(text.toLowerCase())
-      );
-    }) || []
+        note.text.toLowerCase().includes(text.toLowerCase()),
+    ) || []
   );
 };
 
 const RemoteGetNotesByTitleAndText = async (text) => {
   const token = await SettingsApi.GetAccessToken();
   return new Promise((resolve, reject) => {
-    return fetch(serverAddress + `note/search/${text}`, {
+    return fetch(serverAddress + `note/search/${encodeURIComponent(text)}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -390,7 +391,7 @@ const LocalDeleteNote = async (noteId) => {
 const RemoteDeleteNote = async (noteId) => {
   const token = await SettingsApi.GetAccessToken();
   return new Promise((resolve, reject) => {
-    return fetch(serverAddress + `note/${noteId}`, {
+    return fetch(serverAddress + `note/${encodeURIComponent(noteId)}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
