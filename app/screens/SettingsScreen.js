@@ -37,10 +37,12 @@ const SettingsScreen = (props) => {
   const [isDarkMode, setDarkMode] = useState(darkMode);
   const [offlineMode, setOfflineMode] = useState(false);
   const [autoSync, setAutoSync] = useState(true);
+  const [userData, setUserData] = useState(undefined);
+
   const UpdateUserStatus = async () => {
-    setIsLoggedIn(
-      (await SettingsApi.GetAccessToken()) && (await SettingsApi.GetUserData()),
-    );
+    const user = await SettingsApi.GetUserData();
+    setUserData(user);
+    setIsLoggedIn((await SettingsApi.GetAccessToken()) && user);
   };
 
   const UpdateOfflineMode = async () => {
@@ -128,11 +130,11 @@ const SettingsScreen = (props) => {
               <View>
                 <View style={styles.accountInfoRow}>
                   <Text style={optionTextStyle}>Login</Text>
-                  <Text style={optionTextStyle}>Login</Text>
+                  <Text style={optionTextStyle}>{userData.login}</Text>
                 </View>
                 <View style={styles.accountInfoRow}>
                   <Text style={optionTextStyle}>Email</Text>
-                  <Text style={optionTextStyle}>Email</Text>
+                  <Text style={optionTextStyle}>{userData.email}</Text>
                 </View>
               </View>
               <TouchableOpacity
