@@ -29,3 +29,14 @@ export function ChunkArray(inputArray, itemsInChunk) {
     return resultArray;
   }, []);
 }
+
+export function NthIndexOfString(string, subString, index) {
+  let i = -1;
+  while (index-- && i++ < string.length) {
+    i = string.indexOf(subString, i);
+    if (i < 0) {
+      break;
+    }
+  }
+  return i;
+}
