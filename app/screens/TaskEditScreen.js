@@ -29,6 +29,7 @@ import * as CategoryApi from '../services/CategoryApi';
 import SnackBar from '../components/SnackBar';
 import ConfirmDialog from '../components/dialogs/ConfirmDialog';
 import CategoryPickerDialog from '../components/dialogs/CategoryPickerDialog';
+import * as NotificationApi from '../services/NotificationApi';
 
 const TaskEditScreen = (props) => {
   const [id, setId] = useState(props.task.id);
@@ -54,7 +55,7 @@ const TaskEditScreen = (props) => {
   ] = useState(false);
   const [note, setNote] = useState(props.task.note || '');
   const [notificationDate, setNotificationDate] = useState(
-    props.task.notificationDate,
+    props.task.notificationDate && new Date(props.task.notificationDate),
   );
   const [notificationId, setNotificationId] = useState(
     props.task.notificationId || '',
@@ -256,12 +257,66 @@ const TaskEditScreen = (props) => {
     }
   };
 
+  const CreateNotification = (newNotificationDate) => {
+    return NotificationApi.CreateTaskNotification({
+      id,
+      title: taskName,
+      startDate,
+      endDate,
+      category,
+      note,
+      notificationDate: newNotificationDate || notificationDate,
+      saveToCalendar,
+      calendarEventId,
+    });
+  };
+
   const SetNotification = (date) => {
-    setNotificationDate(date);
+    if (id !== null && id !== undefined && id.length > 0) {
+      let notifId;
+      if (notificationId && notificationDate) {
+        NotificationApi.CancelNotification(notificationId);
+      } else {
+        notifId = CreateNotification(date);
+        setNotificationDate(date);
+        setNotificationId(notifId);
+      }
+      TaskApi.ChangeTaskNotification(id, notifId, date)
+        .then(() => {
+          setNotificationDate(date);
+          setNotificationId(notifId);
+        })
+        .catch((error) => {
+          NotificationApi.CancelNotification(notifId);
+          setNotificationDate(undefined);
+          setNotificationId(undefined);
+          snackBarRef.current.ShowSnackBar(error?.message, 2000, false);
+        });
+    } else {
+      setNotificationDate(date);
+    }
   };
 
   const OnCancelNotification = () => {
-    setNotificationDate(undefined);
+    if (id !== null && id !== undefined && id.length > 0) {
+      if (notificationId && notificationDate) {
+        TaskApi.ChangeTaskNotification(id, undefined, undefined)
+          .then(() => {
+            NotificationApi.CancelNotification(notificationId);
+            setNotificationDate(undefined);
+            setNotificationId(undefined);
+          })
+          .catch((error) => {
+            NotificationApi.CancelNotification(notificationId);
+            setNotificationDate(undefined);
+            setNotificationId(undefined);
+            snackBarRef.current.ShowSnackBar(error?.message, 2000, false);
+          });
+      }
+    } else {
+      setNotificationDate(undefined);
+      setNotificationId(undefined);
+    }
   };
 
   const ChangeSaveToCalendar = (value) => {
@@ -281,7 +336,19 @@ const TaskEditScreen = (props) => {
     setDeleteTaskConfirmDialogVisible(false);
     TaskApi.DeleteTask(id)
       .then(() => {
-        // TODO: clear notification and calendar
+        // TODO: clear calendar event
+        TaskApi.ChangeTaskNotification(undefined, undefined)
+          .then(() => {
+            NotificationApi.CancelNotification(notificationId);
+            setNotificationDate(undefined);
+            setNotificationId(undefined);
+          })
+          .catch((error) => {
+            NotificationApi.CancelNotification(notificationId);
+            setNotificationDate(undefined);
+            setNotificationId(undefined);
+            snackBarRef.current.ShowSnackBar(error?.message, 2000, false);
+          });
         NavigationHelperFunctions.MoveBackOneScreen(
           NavigationHelperFunctions.TASK_STACK_ID,
         );
@@ -299,6 +366,7 @@ const TaskEditScreen = (props) => {
       endDate,
       categoryId: category ? category.id : undefined,
       note,
+      ...(notificationDate && {notificationId: CreateNotification()}),
       notificationDate,
       saveToCalendar,
     })

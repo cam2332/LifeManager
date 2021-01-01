@@ -16,6 +16,9 @@ import TaskMainScreen from './app/screens/TaskMainScreen';
 import TaskEditScreen from './app/screens/TaskEditScreen';
 import SettingsScreen from './app/screens/SettingsScreen';
 import * as SettingsApi from './app/services/SettingsApi';
+import * as NotificationApi from './app/services/NotificationApi';
+
+NotificationApi.Configure();
 
 Navigation.registerComponent(NavigationHelperFunctions.LOGIN_SCREEN_ID, () =>
   gestureHandlerRootHOC(LoginScreen),

@@ -482,7 +482,34 @@ export const ChangeTaskIsDone = async (taskId, isDone) => {
   });
 };
 
-const LocalGetAllTasks = async () => {
+const LocalChangeTaskNotification = async (
+  taskId,
+  notificationId,
+  notificationDate,
+) => {
+  try {
+    const task = await taskDB.get(taskId);
+    task.notificationId = notificationId;
+    task.notificationDate = notificationDate;
+    const updatedTask = await taskDB.put(task);
+    return updatedTask.ok;
+  } catch (err) {
+    return false;
+  }
+};
+
+export const ChangeTaskNotification = async (
+  taskId,
+  notificationId,
+  notificationDate,
+) => {
+  return new Promise(async (resolve, reject) => {
+    await LocalChangeTaskNotification(taskId, notificationId, notificationDate);
+    resolve();
+  });
+};
+
+export const LocalGetAllTasks = async () => {
   const tasks = await taskDB.allDocs({include_docs: true});
   return tasks.rows.map((row) => {
     row.doc.id = row.doc._id;
