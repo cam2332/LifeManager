@@ -5,6 +5,28 @@ import * as SettingsApi from './SettingsApi';
 import PouchDB from 'pouchdb-react-native';
 const taskDB = new PouchDB('tasks');
 
+export const LocalUpdateTask = async (task) => {
+  try {
+    const localTask = await taskDB.get(task.id);
+    localTask.title = task.title;
+    localTask.startDate = task.startDate;
+    localTask.endDate = task.endDate;
+    localTask.categoryId = task.categoryId;
+    localTask.note = task.note;
+    localTask.notificationDate = task.notificationDate;
+    localTask.notificationId = task.notificationId;
+    localTask.saveToCalendar = task.saveToCalendar;
+    localTask.calendarEventId = task.calendarEventId;
+    localTask.done = task.done;
+    localTask.favorite = task.favorite;
+    localTask.lastEditDate = task.lastEditDate || new Date();
+    const updatedTask = await taskDB.put(localTask);
+    return updatedTask.ok;
+  } catch (err) {
+    return {};
+  }
+};
+
 const LocalCreateTask = async (task) => {
   try {
     const createdTask = await taskDB.put({

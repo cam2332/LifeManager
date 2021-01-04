@@ -5,6 +5,21 @@ import * as SettingsApi from './SettingsApi';
 import PouchDB from 'pouchdb-react-native';
 const noteDB = new PouchDB('notes');
 
+export const LocalUpdateNote = async (note) => {
+  try {
+    const localNote = await noteDB.get(note.id);
+    localNote.title = note.title;
+    localNote.text = note.text;
+    localNote.createDate = note.createDate;
+    localNote.lastEditDate = note.lastEditDate;
+    localNote.color = note.color;
+    const updatedNote = await noteDB.put(localNote);
+    return updatedNote.ok;
+  } catch (err) {
+    return {};
+  }
+};
+
 const LocalCreateNote = async (note) => {
   try {
     const createdNote = await noteDB.put({
