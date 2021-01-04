@@ -218,7 +218,6 @@ const LocalChangeNoteColor = async (noteId, newColor) => {
     note.color = newColor;
     note.lastEditDate = new Date();
     const updatedNote = await noteDB.put(note);
-    console.log('change note color', updatedNote);
     return updatedNote.ok;
   } catch (err) {
     return false;
@@ -276,7 +275,7 @@ export const ChangeNoteColor = async (noteId, newColor) => {
   });
 };
 
-const LocalGetAllNotes = async () => {
+export const LocalGetAllNotes = async () => {
   const notes = await noteDB.allDocs({include_docs: true});
   return notes.rows.map((row) => {
     row.doc.id = row.doc._id;
@@ -297,17 +296,16 @@ const RemoteGetAllNotes = async () => {
     })
       .then((response) => {
         const statusCode = response.status;
-        const data = response.json();
-        return Promise.all([statusCode, data]);
+        return Promise.all([statusCode, response]);
       })
-      .then(([statusCode, data]) => {
+      .then(([statusCode, response]) => {
         if (statusCode === 200) {
+          const data = response.json();
           resolve(data);
-        } else if (
-          statusCode === 404 ||
-          statusCode === 400 ||
-          statusCode === 401
-        ) {
+        } else if (statusCode === 404) {
+          resolve([]);
+        } else if (statusCode === 400 || statusCode === 401) {
+          const data = response.json();
           reject(data);
         } else {
           reject();
@@ -356,17 +354,16 @@ const RemoteGetNotesByTitleAndText = async (text) => {
     })
       .then((response) => {
         const statusCode = response.status;
-        const data = response.json();
-        return Promise.all([statusCode, data]);
+        return Promise.all([statusCode, response]);
       })
-      .then(([statusCode, data]) => {
+      .then(([statusCode, response]) => {
         if (statusCode === 200) {
+          const data = response.json();
           resolve(data);
-        } else if (
-          statusCode === 404 ||
-          statusCode === 400 ||
-          statusCode === 401
-        ) {
+        } else if (statusCode === 404) {
+          resolve([]);
+        } else if (statusCode === 400 || statusCode === 401) {
+          const data = response.json();
           reject(data);
         } else {
           reject();
@@ -469,13 +466,12 @@ const LocalDeleteNotes = async (notesIds) => {
 const RemoteDeleteNotes = async (notesIds) => {
   const token = await SettingsApi.GetAccessToken();
   return new Promise((resolve, reject) => {
-    return fetch(serverAddress + 'note/', {
+    return fetch(serverAddress + `note/?ids=${encodeURIComponent(notesIds)}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
         Authorization: token,
       },
-      body: JSON.stringify(notesIds),
     })
       .then((response) => {
         const statusCode = response.status;

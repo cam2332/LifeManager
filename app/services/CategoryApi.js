@@ -5,7 +5,7 @@ import * as SettingsApi from './SettingsApi';
 import PouchDB from 'pouchdb-react-native';
 const categoryDB = new PouchDB('categories');
 
-const LocalGetCategories = async () => {
+export const LocalGetCategories = async () => {
   const categories = await categoryDB.allDocs({include_docs: true});
   return categories.rows.map((row) => {
     row.doc.id = row.doc._id;
@@ -26,17 +26,16 @@ const RemoteGetCategories = async () => {
     })
       .then((response) => {
         const statusCode = response.status;
-        const data = response.json();
-        return Promise.all([statusCode, data]);
+        return Promise.all([statusCode, response]);
       })
-      .then(([statusCode, data]) => {
+      .then(([statusCode, response]) => {
         if (statusCode === 200) {
+          const data = response.json();
           resolve(data);
-        } else if (
-          statusCode === 404 ||
-          statusCode === 400 ||
-          statusCode === 401
-        ) {
+        } else if (statusCode === 404) {
+          resolve([]);
+        } else if (statusCode === 400 || statusCode === 401) {
+          const data = response.json();
           reject(data);
         } else {
           reject();
@@ -84,17 +83,16 @@ const RemoteGetCategoryById = async (categoryId) => {
     })
       .then((response) => {
         const statusCode = response.status;
-        const data = response.json();
-        return Promise.all([statusCode, data]);
+        return Promise.all([statusCode, response]);
       })
-      .then(([statusCode, data]) => {
+      .then(([statusCode, response]) => {
         if (statusCode === 200) {
+          const data = response.json();
           resolve(data);
-        } else if (
-          statusCode === 404 ||
-          statusCode === 400 ||
-          statusCode === 401
-        ) {
+        } else if (statusCode === 404) {
+          resolve(undefined);
+        } else if (statusCode === 400 || statusCode === 401) {
+          const data = response.json();
           reject(data);
         } else {
           reject();
@@ -120,10 +118,10 @@ export const GetCategoryById = (categoryId) => {
   });
 };
 
-const LocalAddCategory = async (category) => {
+export const LocalAddCategory = async (category) => {
   try {
     const createdCategory = await categoryDB.put({
-      _id: category._id || UniqueId(),
+      _id: category.id || UniqueId(),
       text: category.text,
       color: category.color,
       icon: category.icon,

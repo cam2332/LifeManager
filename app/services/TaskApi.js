@@ -5,6 +5,24 @@ import * as SettingsApi from './SettingsApi';
 import PouchDB from 'pouchdb-react-native';
 const taskDB = new PouchDB('tasks');
 
+const MergeLocalTaskDataArray = (array, localArray) => {
+  let merged = [];
+  for (let i = 0; i < array.length; i++) {
+    const localTaskIndex = localArray.findIndex(
+      (lTask) => lTask.id === array[i].id,
+    );
+    if (localTaskIndex !== -1) {
+      merged.push({
+        ...array[i],
+        ...localArray[localTaskIndex],
+      });
+    } else {
+      merged.push(array[i]);
+    }
+  }
+  return merged;
+};
+
 export const LocalUpdateTask = async (task) => {
   try {
     const localTask = await taskDB.get(task.id);
@@ -40,6 +58,9 @@ const LocalCreateTask = async (task) => {
       notificationDate: task.notificationDate || '',
       saveToCalendar: task.saveToCalendar || false,
       calendarEventId: task.calendarEventId || '',
+      done: task.done || false,
+      favorite: task.favorite || false,
+      lastEditDate: task.lastEditDate || new Date(),
     });
     return {id: createdTask.id, ...task};
   } catch (err) {
@@ -103,6 +124,7 @@ const LocalChangeTaskTitle = async (taskId, newTitle) => {
   try {
     const task = await taskDB.get(taskId);
     task.title = newTitle;
+    task.lastEditDate = new Date();
     const updatedTask = await taskDB.put(task);
     return updatedTask.ok;
   } catch (err) {
@@ -160,6 +182,7 @@ const LocalChangeTaskStartDate = async (taskId, newStartDate) => {
   try {
     const task = await taskDB.get(taskId);
     task.startDate = newStartDate;
+    task.lastEditDate = new Date();
     const updatedTask = await taskDB.put(task);
     return updatedTask.ok;
   } catch (err) {
@@ -217,6 +240,7 @@ const LocalChangeTaskEndDate = async (taskId, newEndDate) => {
   try {
     const task = await taskDB.get(taskId);
     task.endDate = newEndDate;
+    task.lastEditDate = new Date();
     const updatedTask = await taskDB.put(task);
     return updatedTask.ok;
   } catch (err) {
@@ -274,6 +298,7 @@ const LocalChangeTaskCategoryId = async (taskId, newCategoryId) => {
   try {
     const task = await taskDB.get(taskId);
     task.categoryId = newCategoryId;
+    task.lastEditDate = new Date();
     const updatedTask = await taskDB.put(task);
     return updatedTask.ok;
   } catch (err) {
@@ -334,6 +359,7 @@ const LocalChangeTaskNote = async (taskId, newNote) => {
   try {
     const task = await taskDB.get(taskId);
     task.note = newNote;
+    task.lastEditDate = new Date();
     const updatedTask = await taskDB.put(task);
     return updatedTask.ok;
   } catch (err) {
@@ -391,6 +417,7 @@ const LocalChangeTaskIsFavorite = async (taskId, isFavorite) => {
   try {
     const task = await taskDB.get(taskId);
     task.favorite = isFavorite;
+    task.lastEditDate = new Date();
     const updatedTask = await taskDB.put(task);
     return updatedTask.ok;
   } catch (err) {
@@ -451,6 +478,7 @@ const LocalChangeTaskIsDone = async (taskId, isDone) => {
   try {
     const task = await taskDB.get(taskId);
     task.done = isDone;
+    task.lastEditDate = new Date();
     const updatedTask = await taskDB.put(task);
     return updatedTask.ok;
   } catch (err) {
@@ -513,6 +541,7 @@ const LocalChangeTaskNotification = async (
     const task = await taskDB.get(taskId);
     task.notificationId = notificationId;
     task.notificationDate = notificationDate;
+    task.lastEditDate = new Date();
     const updatedTask = await taskDB.put(task);
     return updatedTask.ok;
   } catch (err) {
@@ -535,6 +564,9 @@ export const LocalGetAllTasks = async () => {
   const tasks = await taskDB.allDocs({include_docs: true});
   return tasks.rows.map((row) => {
     row.doc.id = row.doc._id;
+    if (row.doc.categoryId && row.doc.categoryId === '') {
+      row.doc.categoryId = undefined;
+    }
     delete row.doc._id;
     return row.doc;
   });
@@ -550,19 +582,24 @@ const RemoteGetAllTasks = async () => {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then((response) => {
+      .then(async (response) => {
         const statusCode = response.status;
-        const data = response.json();
-        return Promise.all([statusCode, data]);
+        return Promise.all([statusCode, response]);
       })
-      .then(([statusCode, data]) => {
+      .then(async ([statusCode, response]) => {
         if (statusCode === 200) {
-          resolve(data);
-        } else if (
-          statusCode === 404 ||
-          statusCode === 400 ||
-          statusCode === 401
-        ) {
+          const data = await response.json();
+          let localTasksData;
+          try {
+            localTasksData = await LocalGetAllTasks();
+            resolve(MergeLocalTaskDataArray(data, localTasksData));
+          } catch (err) {
+            resolve(data);
+          }
+        } else if (statusCode === 404) {
+          resolve([]);
+        } else if (statusCode === 400 || statusCode === 401) {
+          const data = await response.json();
           reject(data);
         } else {
           reject();
@@ -612,17 +649,18 @@ const RemoteGetTasksByTitle = async (title) => {
     )
       .then((response) => {
         const statusCode = response.status;
-        const data = response.json();
-        return Promise.all([statusCode, data]);
+
+        return Promise.all([statusCode, response]);
       })
-      .then(([statusCode, data]) => {
+      .then(async ([statusCode, response]) => {
         if (statusCode === 200) {
-          resolve(data);
-        } else if (
-          statusCode === 404 ||
-          statusCode === 400 ||
-          statusCode === 401
-        ) {
+          const data = response.json();
+          const localTasksData = await LocalGetTasksByTitle(title);
+          resolve(MergeLocalTaskDataArray(data, localTasksData));
+        } else if (statusCode === 404) {
+          resolve([]);
+        } else if (statusCode === 400 || statusCode === 401) {
+          const data = response.json();
           reject(data);
         } else {
           reject();
@@ -678,17 +716,18 @@ const RemoteGetTasksByCategoryId = async (categoryId) => {
     )
       .then((response) => {
         const statusCode = response.status;
-        const data = response.json();
-        return Promise.all([statusCode, data]);
+
+        return Promise.all([statusCode, response]);
       })
-      .then(([statusCode, data]) => {
+      .then(async ([statusCode, response]) => {
         if (statusCode === 200) {
-          resolve(data);
-        } else if (
-          statusCode === 404 ||
-          statusCode === 400 ||
-          statusCode === 401
-        ) {
+          const data = response.json();
+          const localTasksData = await LocalGetTasksByCategoryId(categoryId);
+          resolve(MergeLocalTaskDataArray(data, localTasksData));
+        } else if (statusCode === 404) {
+          resolve([]);
+        } else if (statusCode === 400 || statusCode === 401) {
+          const data = response.json();
           reject(data);
         } else {
           reject();
@@ -769,17 +808,21 @@ const RemoteGetTasksByTitleAndCategoryId = async (title, categoryId) => {
     )
       .then((response) => {
         const statusCode = response.status;
-        const data = response.json();
-        return Promise.all([statusCode, data]);
+
+        return Promise.all([statusCode, response]);
       })
-      .then(([statusCode, data]) => {
+      .then(async ([statusCode, response]) => {
         if (statusCode === 200) {
-          resolve(data);
-        } else if (
-          statusCode === 404 ||
-          statusCode === 400 ||
-          statusCode === 401
-        ) {
+          const data = response.json();
+          const localTasksData = await LocalGetTasksByTitleAndCategoryId(
+            title,
+            categoryId,
+          );
+          resolve(MergeLocalTaskDataArray(data, localTasksData));
+        } else if (statusCode === 404) {
+          resolve([]);
+        } else if (statusCode === 400 || statusCode === 401) {
+          const data = response.json();
           reject(data);
         } else {
           reject();
@@ -882,13 +925,12 @@ const LocalDeleteTasks = async (tasksIds) => {
 const RemoteDeleteTasks = async (tasksIds) => {
   const token = await SettingsApi.GetAccessToken();
   return new Promise((resolve, reject) => {
-    return fetch(serverAddress + 'task/', {
+    return fetch(serverAddress + `task/?ids=${encodeURIComponent(noteIds)}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(tasksIds),
     })
       .then((response) => {
         const statusCode = response.status;
