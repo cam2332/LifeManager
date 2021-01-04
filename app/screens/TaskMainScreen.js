@@ -94,7 +94,11 @@ const TaskMainScreen = (props) => {
   const UpdateTaskList = () => {
     TaskApi.GetAllTasks()
       .then((tasks) => {
-        setTaskList(SortTaskList(tasks));
+        if (tasks.length > 0) {
+          setTaskList(SortTaskList(tasks));
+        } else {
+          setTaskList([]);
+        }
         setIsFetching(false);
       })
       .catch((error) => {
