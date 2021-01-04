@@ -190,5 +190,32 @@ export const GetIsDarkMode = async () => {
   }
 };
 
+export const SetLastSynchronizationDate = async (newSynchronizationDate) => {
+  try {
+    try {
+      const synchronizationDate = await settingsDB.get('synchronizationDate');
+      synchronizationDate.value = newSynchronizationDate;
+      await settingsDB.put(synchronizationDate);
+    } catch (err) {
+      await settingsDB.put(
+        {_rev: '1', _id: 'synchronizationDate', value: newSynchronizationDate},
+        {force: true},
+      );
+    }
+  } catch (err) {
+    console.log('set synchronization Date failed', err);
+  }
+};
+
+export const GetLastSynchronizationDate = async () => {
+  try {
+    const synchronizationDate = await settingsDB.get('synchronizationDate');
+    return synchronizationDate.value;
+  } catch (err) {
+    console.log('get synchronization Date failed', err);
+    return undefined;
+  }
+};
+
   }
 };
