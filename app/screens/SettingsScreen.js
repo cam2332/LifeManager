@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   StyleSheet,
@@ -25,8 +25,10 @@ import {
 } from '../AppConfig';
 import ScreenHeader from '../components/ScreenHeader';
 import * as NavigationHelperFunctions from '../NavigationHelperFunctions';
+import * as LocalizationHelperFunctions from '../LocalizationHelperFunctions';
 import * as SettingsApi from '../services/SettingsApi';
 import * as UserApi from '../services/UserApi';
+import * as SyncApi from '../services/SyncApi';
 
 const SettingsScreen = (props) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -38,6 +40,7 @@ const SettingsScreen = (props) => {
   const [offlineMode, setOfflineMode] = useState(false);
   const [autoSync, setAutoSync] = useState(true);
   const [userData, setUserData] = useState(undefined);
+  const [synchronizationDate, setSynchronizationDate] = useState(undefined);
 
   const UpdateUserStatus = async () => {
     const user = await SettingsApi.GetUserData();
@@ -53,6 +56,11 @@ const SettingsScreen = (props) => {
     setAutoSync(await SettingsApi.GetIsAutoSync());
   };
 
+  const UpdateLastSyncDate = async () => {
+    const date = await SettingsApi.GetLastSynchronizationDate();
+    setSynchronizationDate(new Date(date));
+  };
+
   useEffect(() => {
     NavigationHelperFunctions.UpdateStatusBarColor(
       props.componentId,
@@ -63,6 +71,7 @@ const SettingsScreen = (props) => {
     UpdateUserStatus();
     UpdateOfflineMode();
     UpdateAutoSync();
+    UpdateLastSyncDate();
   }, []);
 
   const OnPressLogin = () => {
@@ -74,13 +83,20 @@ const SettingsScreen = (props) => {
       .then(async () => {
         await UserApi.ClearUserTokenAndGoToLoginScreen();
       })
-      .catch((error) => {
-        console.log('Error occurred while trying to logout.', error);
-        // TODO: Handle error here
+      .catch(async (error) => {
+        await UserApi.ClearUserTokenAndGoToLoginScreen();
       });
   };
 
-  const Synchronize = () => {};
+  const Synchronize = () => {
+    SyncApi.Sync()
+      .then(async () => {
+        setSynchronizationDate(new Date());
+        await SettingsApi.SetLastSynchronizationDate(new Date());
+      })
+      .catch((error) => {
+      });
+  };
 
   const optionTextStyle = StyleSheet.flatten([
     styles.optionText,
@@ -256,9 +272,18 @@ const SettingsScreen = (props) => {
                 Synchronize();
               }}>
               <Text style={optionTextStyle}>Synchronizuj</Text>
-              <Text style={subOptionTextStyle}>
-                Ostatnia synchronizacja: {new Date().toLocaleString()}
-              </Text>
+              {synchronizationDate && (
+                <Text style={subOptionTextStyle}>
+                  Ostatnia synchronizacja:{' '}
+                  {(synchronizationDate &&
+                    `${LocalizationHelperFunctions.datePL(
+                      synchronizationDate,
+                    )} ${LocalizationHelperFunctions.time(
+                      synchronizationDate,
+                    )}`) ||
+                    ''}
+                </Text>
+              )}
             </TouchableOpacity>
             <View style={styles.switchContainer}>
               <Text style={optionTextStyle}>Tryb offline</Text>
