@@ -29,6 +29,7 @@ import * as LocalizationHelperFunctions from '../LocalizationHelperFunctions';
 import * as SettingsApi from '../services/SettingsApi';
 import * as UserApi from '../services/UserApi';
 import * as SyncApi from '../services/SyncApi';
+import SnackBar from '../components/SnackBar';
 
 const SettingsScreen = (props) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -41,6 +42,9 @@ const SettingsScreen = (props) => {
   const [autoSync, setAutoSync] = useState(true);
   const [userData, setUserData] = useState(undefined);
   const [synchronizationDate, setSynchronizationDate] = useState(undefined);
+
+  const snackBarVisibilityDuration = 4000;
+  const snackBarRef = useRef();
 
   const UpdateUserStatus = async () => {
     const user = await SettingsApi.GetUserData();
@@ -84,6 +88,12 @@ const SettingsScreen = (props) => {
         await UserApi.ClearUserTokenAndGoToLoginScreen();
       })
       .catch(async (error) => {
+        snackBarRef.current.ShowSnackBar(
+          'Wystąpił błąd podczas wylogowywania.',
+          snackBarVisibilityDuration,
+          '',
+          false,
+        );
         await UserApi.ClearUserTokenAndGoToLoginScreen();
       });
   };
@@ -93,8 +103,20 @@ const SettingsScreen = (props) => {
       .then(async () => {
         setSynchronizationDate(new Date());
         await SettingsApi.SetLastSynchronizationDate(new Date());
+        snackBarRef.current.ShowSnackBar(
+          'Synchronizacja ukończona pomyślnie.',
+          snackBarVisibilityDuration,
+          '',
+          false,
+        );
       })
       .catch((error) => {
+        snackBarRef.current.ShowSnackBar(
+          'Wystąpił błąd podczas synchronizacji danych.',
+          snackBarVisibilityDuration,
+          '',
+          false,
+        );
       });
   };
 
@@ -318,6 +340,7 @@ const SettingsScreen = (props) => {
           </View>
         )}
       </ScrollView>
+      <SnackBar ref={snackBarRef} />
     </View>
   );
 };
