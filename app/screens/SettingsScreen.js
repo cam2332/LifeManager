@@ -111,12 +111,21 @@ const SettingsScreen = (props) => {
         );
       })
       .catch((error) => {
-        snackBarRef.current.ShowSnackBar(
-          'Wystąpił błąd podczas synchronizacji danych.',
-          snackBarVisibilityDuration,
-          '',
-          false,
-        );
+        if (error === 'no network') {
+          snackBarRef.current.ShowSnackBar(
+            'Brak połączenia z Internetem.',
+            snackBarVisibilityDuration,
+            '',
+            false,
+          );
+        } else {
+          snackBarRef.current.ShowSnackBar(
+            'Wystąpił błąd podczas synchronizacji danych.',
+            snackBarVisibilityDuration,
+            '',
+            false,
+          );
+        }
       });
   };
 
@@ -134,6 +143,7 @@ const SettingsScreen = (props) => {
     styles.sectionTitle,
     {color: primaryColor},
   ]);
+
   const spacerLineStyle = StyleSheet.flatten([
     styles.spacerLine,
     {backgroundColor: secondaryThreeFourthColor},
