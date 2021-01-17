@@ -1,4 +1,5 @@
 import PouchDB from 'pouchdb-react-native';
+import * as AppConfig from '../AppConfig';
 const settingsDB = new PouchDB('settings');
 
 export const SetAccessToken = async (token) => {
@@ -159,7 +160,7 @@ export const GetPrimaryColor = async () => {
     return primaryColor.value;
   } catch (err) {
     console.log('get primary color failed', err);
-    return undefined;
+    return AppConfig.Colors.Blue.Normal;
   }
 };
 
