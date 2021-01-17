@@ -8,7 +8,7 @@ import * as CategoryApi from './CategoryApi';
 export const Sync = async () => {
   const isConnected = await NetworkApi.IsNetworkAvailable();
   if (!isConnected) {
-    return false;
+    return Promise.reject('no network');
   }
   const token = await SettingsApi.GetAccessToken();
   const notes = await NoteApi.LocalGetAllNotes();
@@ -32,22 +32,36 @@ export const Sync = async () => {
         const statusCode = response.status;
         return Promise.all([statusCode, response]);
       })
-      .then(([statusCode, response]) => {
+      .then(async ([statusCode, response]) => {
         if (statusCode === 200) {
           const {
             notes: remoteNotes,
             tasks: remoteTasks,
             categories: remoteCategories,
-          } = response.json();
+          } = await response.json();
           remoteNotes &&
             remoteNotes.length > 0 &&
             remoteNotes.forEach((note) => {
-              NoteApi.LocalUpdateNote(note);
+              const localNoteIndex = notes.findIndex((localNote) => {
+                localNote.id === note.id;
+              });
+              if (localNoteIndex !== -1) {
+                NoteApi.LocalUpdateNote(note);
+              } else {
+                NoteApi.LocalCreateNote(note);
+              }
             });
           remoteTasks &&
             remoteTasks.length > 0 &&
             remoteTasks.forEach((task) => {
-              TaskApi.LocalUpdateTask(task);
+              const localTaskIndex = tasks.findIndex((localTask) => {
+                localTask.id = task.id;
+              });
+              if (localTaskIndex !== -1) {
+                TaskApi.LocalUpdateTask(task);
+              } else {
+                TaskApi.LocalCreateTask(task);
+              }
             });
           remoteCategories &&
             remoteCategories.length > 0 &&

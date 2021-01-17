@@ -20,7 +20,7 @@ export const LocalUpdateNote = async (note) => {
   }
 };
 
-const LocalCreateNote = async (note) => {
+export const LocalCreateNote = async (note) => {
   try {
     const createdNote = await noteDB.put({
       _id: note.id || UniqueId(),

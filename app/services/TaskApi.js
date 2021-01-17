@@ -45,7 +45,7 @@ export const LocalUpdateTask = async (task) => {
   }
 };
 
-const LocalCreateTask = async (task) => {
+export const LocalCreateTask = async (task) => {
   try {
     const createdTask = await taskDB.put({
       _id: task.id || UniqueId(),
@@ -925,7 +925,7 @@ const LocalDeleteTasks = async (tasksIds) => {
 const RemoteDeleteTasks = async (tasksIds) => {
   const token = await SettingsApi.GetAccessToken();
   return new Promise((resolve, reject) => {
-    return fetch(serverAddress + `task/?ids=${encodeURIComponent(noteIds)}`, {
+    return fetch(serverAddress + `task/?ids=${encodeURIComponent(tasksIds)}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
