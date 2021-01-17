@@ -55,6 +55,7 @@ export const LoginUser = async (login, password) => {
           try {
             await SettingsApi.SetAccessToken(data.token);
             await SettingsApi.SetUserData(data.user);
+            await SettingsApi.SetIsOfflineMode(false);
             resolve();
           } catch (err) {
             reject();
