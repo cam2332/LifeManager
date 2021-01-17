@@ -65,6 +65,21 @@ const LoginScreen = (props) => {
       });
   };
 
+  const loginTextStyle = StyleSheet.flatten([
+    styles.loginText,
+    {color: darkMode ? secondaryNegativeColor : primaryColor},
+  ]);
+
+  const registerHintTextStyle = StyleSheet.flatten([
+    styles.registerHintText,
+    {color: primaryColor},
+  ]);
+
+  const registerHintBoldTextStyle = StyleSheet.flatten([
+    styles.registerHintBoldText,
+    {color: primaryColor},
+  ]);
+
   return (
     <View style={styles.mainContainer}>
       <ScreenHeader
@@ -84,10 +99,14 @@ const LoginScreen = (props) => {
         iconsColor={darkMode ? secondaryNegativeColor : primaryColor}
       />
       <View style={styles.sectionLogo}>
-        <Image style={styles.image} source={LogoIcon} />
+        <Image
+          style={styles.image}
+          source={LogoIcon}
+          tintColor={primaryColor}
+        />
       </View>
       <View style={styles.sectionTitle}>
-        <Text style={styles.loginText}>Logowanie</Text>
+        <Text style={loginTextStyle}>Logowanie</Text>
       </View>
       <View style={{flex: 0.25}} />
       <View style={styles.sectionBody}>
@@ -173,8 +192,8 @@ const LoginScreen = (props) => {
           style={styles.sectionRegisterHint}
           onPress={onPressGoToRegisterScreen}>
           <View style={styles.registerHintView}>
-            <Text style={styles.registerHintText}>{'Nie masz konta?   '}</Text>
-            <Text style={styles.registerHintBoldText}>Zarejestruj się</Text>
+            <Text style={registerHintTextStyle}>{'Nie masz konta?   '}</Text>
+            <Text style={registerHintBoldTextStyle}>Zarejestruj się</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -186,24 +205,20 @@ const LoginScreen = (props) => {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: secondaryColor,
   },
   sectionLogo: {
     alignItems: 'center',
     flex: 0.4,
-    backgroundColor: secondaryColor,
     justifyContent: 'center',
   },
   sectionTitle: {
     flex: 0.15,
-    backgroundColor: secondaryColor,
   },
   image: {
     resizeMode: 'contain',
     flex: 0.6,
   },
   loginText: {
-    color: primaryColor,
     fontSize: 44,
     alignSelf: 'center',
     marginVertical: 2,
@@ -228,7 +243,6 @@ const styles = StyleSheet.create({
   sectionBody: {
     flex: 0.45,
     justifyContent: 'space-around',
-    backgroundColor: secondaryColor,
     paddingBottom: 40,
   },
   sectionRegisterHint: {
@@ -244,12 +258,10 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   registerHintText: {
-    color: primaryColor,
     fontSize: 18,
     alignSelf: 'center',
   },
   registerHintBoldText: {
-    color: primaryColor,
     fontSize: 18,
     alignSelf: 'center',
     fontWeight: 'bold',

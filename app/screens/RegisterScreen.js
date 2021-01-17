@@ -87,6 +87,21 @@ const RegisterScreen = (props) => {
       });
   };
 
+  const registerTextStyle = StyleSheet.flatten([
+    styles.registerText,
+    {color: darkMode ? secondaryNegativeColor : secondaryColor},
+  ]);
+
+  const loginHintTextStyle = StyleSheet.flatten([
+    styles.loginHintText,
+    {color: primaryColor},
+  ]);
+
+  const loginHintBoldTextStyle = StyleSheet.flatten([
+    styles.loginHintBoldText,
+    {color: primaryColor},
+  ]);
+
   return (
     <View style={styles.mainContainer}>
       <ScreenHeader
@@ -106,10 +121,14 @@ const RegisterScreen = (props) => {
         iconsColor={darkMode ? secondaryNegativeColor : primaryColor}
       />
       <View style={styles.sectionLogo}>
-        <Image style={styles.image} source={LogoIcon} />
+        <Image
+          style={styles.image}
+          source={LogoIcon}
+          tintColor={primaryColor}
+        />
       </View>
       <View style={styles.sectionTitle}>
-        <Text style={styles.registerText}>Rejestracja</Text>
+        <Text style={registerTextStyle}>Rejestracja</Text>
       </View>
       <View style={styles.sectionBody}>
         <CustomTextInput
@@ -282,8 +301,8 @@ const RegisterScreen = (props) => {
           style={styles.sectionLoginHint}
           onPress={OnPressGoToLoginScreen}>
           <View style={styles.loginHintView}>
-            <Text style={styles.loginHintText}>{'Masz konto?   '}</Text>
-            <Text style={styles.loginHintBoldText}>Zaloguj się</Text>
+            <Text style={loginHintTextStyle}>{'Masz konto?   '}</Text>
+            <Text style={loginHintBoldTextStyle}>Zaloguj się</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -295,24 +314,20 @@ const RegisterScreen = (props) => {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: secondaryColor,
   },
   sectionLogo: {
     alignItems: 'center',
     flex: 0.4,
-    backgroundColor: secondaryColor,
     justifyContent: 'center',
   },
   sectionTitle: {
     flex: 0.2,
-    backgroundColor: secondaryColor,
   },
   image: {
     resizeMode: 'contain',
     flex: 0.6,
   },
   registerText: {
-    color: primaryColor,
     fontSize: 44,
     alignSelf: 'center',
     marginVertical: 2,
@@ -334,12 +349,10 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   loginHintText: {
-    color: primaryColor,
     fontSize: 18,
     alignSelf: 'center',
   },
   loginHintBoldText: {
-    color: primaryColor,
     fontSize: 18,
     alignSelf: 'center',
     fontWeight: 'bold',
@@ -360,7 +373,6 @@ const styles = StyleSheet.create({
   sectionBody: {
     flex: 0.65,
     justifyContent: 'space-around',
-    backgroundColor: secondaryColor,
     paddingBottom: 40,
   },
   inputText: {
