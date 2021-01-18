@@ -4,6 +4,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   StyleSheet,
   Modal,
 } from 'react-native';
@@ -108,67 +109,69 @@ const AddCategoryDialog = (props) => {
           ResetDialog();
         }}>
         <View style={styles.dialogContainer}>
-          <View style={dialogContentStyle}>
-            <Text style={titleStyle}>{props.title}</Text>
-            <View style={styles.inputView}>
-              <TextInput
-                ref={inputRef}
-                style={[
-                  styles.input,
-                  errorValue
-                    ? styles.errorColor
-                    : {
-                        color: secondaryNegativeColor,
-                      },
-                ]}
-                onChangeText={(text) => ChangeInputText(text)}
-                onEndEditing={() => OnEndTyping()}
-                value={inputText}
-                placeholder={props.placeholder}
-                placeholderTextColor={
-                  props.placeholderTextColor || SECONDARY_HALF_COLOR
-                }
-                underlineColorAndroid={errorValue ? 'red' : primaryColor}
-                selectionColor={errorValue ? 'red' : secondaryNegativeColor}
-              />
-              <Text style={styles.errorText}>{errorValue && 'test'}</Text>
-            </View>
-            <ColorSelector
-              numberOfColumns={7}
-              selectedColor={inputColor}
-              OnSelectColor={setInputColor}
-            />
-            <View style={styles.buttonsContainer}>
-              <TouchableOpacity
-                onPress={() => {
-                  console.log('press', errorValue, inputText);
-                  if (!errorValue && inputText) {
-                    props.OnPressConfirm(
-                      {text: inputText, color: inputColor},
-                      errorValue,
-                    );
-                    ResetDialog();
+          <TouchableWithoutFeedback>
+            <View style={dialogContentStyle}>
+              <Text style={titleStyle}>{props.title}</Text>
+              <View style={styles.inputView}>
+                <TextInput
+                  ref={inputRef}
+                  style={[
+                    styles.input,
+                    errorValue
+                      ? styles.errorColor
+                      : {
+                          color: secondaryNegativeColor,
+                        },
+                  ]}
+                  onChangeText={(text) => ChangeInputText(text)}
+                  onEndEditing={() => OnEndTyping()}
+                  value={inputText}
+                  placeholder={props.placeholder}
+                  placeholderTextColor={
+                    props.placeholderTextColor || SECONDARY_HALF_COLOR
                   }
-                }}
-                style={styles.confirmButton}>
-                <Text style={confirmButtonTextStyle}>
-                  {props.confirmText || 'Potwierdź'}
-                </Text>
-              </TouchableOpacity>
-              {!props.onlyConfirmButtonVisible && (
+                  underlineColorAndroid={errorValue ? 'red' : primaryColor}
+                  selectionColor={errorValue ? 'red' : secondaryNegativeColor}
+                />
+                <Text style={styles.errorText}>{errorValue && 'test'}</Text>
+              </View>
+              <ColorSelector
+                numberOfColumns={7}
+                selectedColor={inputColor}
+                OnSelectColor={setInputColor}
+              />
+              <View style={styles.buttonsContainer}>
                 <TouchableOpacity
                   onPress={() => {
-                    props.OnPressCancel();
-                    ResetDialog();
+                    console.log('press', errorValue, inputText);
+                    if (!errorValue && inputText) {
+                      props.OnPressConfirm(
+                        {text: inputText, color: inputColor},
+                        errorValue,
+                      );
+                      ResetDialog();
+                    }
                   }}
-                  style={styles.rejectButton}>
-                  <Text style={rejectButtonTextStyle}>
-                    {props.rejectText || 'Anuluj'}
+                  style={styles.confirmButton}>
+                  <Text style={confirmButtonTextStyle}>
+                    {props.confirmText || 'Potwierdź'}
                   </Text>
                 </TouchableOpacity>
-              )}
+                {!props.onlyConfirmButtonVisible && (
+                  <TouchableOpacity
+                    onPress={() => {
+                      props.OnPressCancel();
+                      ResetDialog();
+                    }}
+                    style={styles.rejectButton}>
+                    <Text style={rejectButtonTextStyle}>
+                      {props.rejectText || 'Anuluj'}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </View>
             </View>
-          </View>
+          </TouchableWithoutFeedback>
         </View>
       </TouchableOpacity>
     </Modal>
