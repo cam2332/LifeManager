@@ -560,6 +560,34 @@ export const ChangeTaskNotification = async (
   });
 };
 
+const LocalChangeTaskCalendarEvent = async (
+  taskId,
+  saveToCalendar,
+  calendarEventId,
+) => {
+  try {
+    const task = await taskDB.get(taskId);
+    task.saveToCalendar = saveToCalendar;
+    task.calendarEventId = calendarEventId;
+    const updatedTask = await taskDB.put(task);
+    return updatedTask.ok;
+  } catch (error) {
+    return false;
+  }
+};
+
+export const ChangeTaskCalendarEvent = async (
+  taskId,
+  saveToCalendar,
+  calendarEventId,
+) => {
+  console.log(taskId, calendarEventId);
+  return new Promise(async (resolve, reject) => {
+    await LocalChangeTaskCalendarEvent(taskId, saveToCalendar, calendarEventId);
+    resolve();
+  });
+};
+
 export const LocalGetAllTasks = async () => {
   const tasks = await taskDB.allDocs({include_docs: true});
   return tasks.rows.map((row) => {

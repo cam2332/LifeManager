@@ -15,6 +15,7 @@
     "pouchdb-react-native": "^6.4.1",
     "react": "16.13.1",
     "react-native": "0.63.2",
+    "react-native-calendar-events": "^2.2.0",
     "react-native-cli": "^2.0.1",
     "react-native-gesture-handler": "^1.8.0",
     "react-native-masonry-layout": "^1.0.6",

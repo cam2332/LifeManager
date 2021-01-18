@@ -30,6 +30,7 @@ import SnackBar from '../components/SnackBar';
 import ConfirmDialog from '../components/dialogs/ConfirmDialog';
 import CategoryPickerDialog from '../components/dialogs/CategoryPickerDialog';
 import * as NotificationApi from '../services/NotificationApi';
+import * as CalendarApi from '../services/CalendarApi';
 
 const TaskEditScreen = (props) => {
   const [id, setId] = useState(props.task.id);
@@ -319,12 +320,51 @@ const TaskEditScreen = (props) => {
     }
   };
 
-  const ChangeSaveToCalendar = (value) => {
-    setSaveToCalendar(value);
+  const CreateCalendarEvent = async () => {
+    return await CalendarApi.SaveEvent(taskName, {
+      startDate: startDate.toISOString(),
+      endDate: endDate.toISOString(),
+      notes: note,
+      description: note,
+    });
+  };
+
+  const ChangeSaveToCalendar = async (value) => {
     if (value) {
-      // TODO: save to calendar
+      if (id !== null && id !== undefined && id.length > 0) {
+        const calendarEventId = await CreateCalendarEvent();
+        TaskApi.ChangeTaskCalendarEvent(id, value, calendarEventId)
+          .then(() => {
+            setSaveToCalendar(value);
+            setCalendarEventId(calendarEventId);
+          })
+          .catch((error) => {
+            CalendarApi.DeleteEvent(calendarEventId);
+            setSaveToCalendar(undefined);
+            setCalendarEventId(undefined);
+            snackBarRef.current.ShowSnackBar(error?.message, 2000, false);
+          });
+      } else {
+        setSaveToCalendar(value);
+      }
     } else {
-      // TODO: remove from calendar
+      if (id !== null && id !== undefined && id.length > 0) {
+        TaskApi.ChangeTaskCalendarEvent(id, false, undefined)
+          .then(() => {
+            CalendarApi.DeleteEvent(calendarEventId);
+            setSaveToCalendar(false);
+            setCalendarEventId(undefined);
+          })
+          .catch((error) => {
+            CalendarApi.DeleteEvent(calendarEventId);
+            setSaveToCalendar(false);
+            setCalendarEventId(undefined);
+            snackBarRef.current.ShowSnackBar(error?.message, 2000, false);
+          });
+      } else {
+        setSaveToCalendar(false);
+        setCalendarEventId(undefined);
+      }
     }
   };
 
@@ -336,7 +376,6 @@ const TaskEditScreen = (props) => {
     setDeleteTaskConfirmDialogVisible(false);
     TaskApi.DeleteTask(id)
       .then(() => {
-        // TODO: clear calendar event
         TaskApi.ChangeTaskNotification(undefined, undefined)
           .then(() => {
             NotificationApi.CancelNotification(notificationId);
@@ -347,6 +386,18 @@ const TaskEditScreen = (props) => {
             NotificationApi.CancelNotification(notificationId);
             setNotificationDate(undefined);
             setNotificationId(undefined);
+            snackBarRef.current.ShowSnackBar(error?.message, 2000, false);
+          });
+        TaskApi.ChangeTaskCalendarEvent(id, false, undefined)
+          .then(() => {
+            CalendarApi.DeleteEvent(calendarEventId);
+            setSaveToCalendar(false);
+            setCalendarEventId(undefined);
+          })
+          .catch((error) => {
+            CalendarApi.DeleteEvent(calendarEventId);
+            setSaveToCalendar(false);
+            setCalendarEventId(undefined);
             snackBarRef.current.ShowSnackBar(error?.message, 2000, false);
           });
         NavigationHelperFunctions.MoveBackOneScreen(
