@@ -23,7 +23,7 @@ import ScreenHeader from '../components/ScreenHeader';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as NavigationHelperFunctions from '../NavigationHelperFunctions';
 import * as LocalizationHelperFunctions from '../LocalizationHelperFunctions';
-import DatePickerDialog from '../components/dialogs/DatePickerDialog';
+import DateTimePickerDialog from '../components/dialogs/DateTimePickerDialog';
 import * as TaskApi from '../services/TaskApi';
 import * as CategoryApi from '../services/CategoryApi';
 import SnackBar from '../components/SnackBar';
@@ -777,7 +777,7 @@ const TaskEditScreen = (props) => {
         </KeyboardAvoidingView>
       </ScrollView>
 
-      <DatePickerDialog
+      <DateTimePickerDialog
         visible={startDatePickerDialogVisible}
         date={startDate}
         OnPressConfirm={(date) => {
@@ -796,7 +796,7 @@ const TaskEditScreen = (props) => {
           setStartDatePickerDialogVisible(false);
         }}
       />
-      <DatePickerDialog
+      <DateTimePickerDialog
         visible={endDatePickerDialogVisible}
         date={endDate}
         OnPressConfirm={(date) => {
@@ -825,7 +825,7 @@ const TaskEditScreen = (props) => {
         OnDismiss={() => setCategoryPickerDialogVisible(false)}
         visible={categoryPickerDialogVisible}
       />
-      <DatePickerDialog
+      <DateTimePickerDialog
         visible={notificationDatePickerDialogVisible}
         date={notificationDate}
         OnPressConfirm={(date) => {
