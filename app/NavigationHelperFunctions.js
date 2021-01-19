@@ -155,7 +155,7 @@ const noteStack = {
           ],
           options: {
             statusBar: {
-              backgroundColor: primaryColor,
+              backgroundColor: secondaryColor,
               style: darkMode ? 'light' : 'dark',
             },
           },
@@ -168,7 +168,7 @@ const noteStack = {
           },
         },
         statusBar: {
-          backgroundColor: primaryColor,
+          backgroundColor: secondaryColor,
           style: darkMode ? 'light' : 'dark',
         },
       },
