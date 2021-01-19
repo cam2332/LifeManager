@@ -244,11 +244,7 @@ export const NavigateToTaskEditScreen = (props) => {
 };
 
 export const SetSettingsRoot = () => {
-  if (currentScreenId !== SETTINGS_SCREEN_ID) {
-    Navigation.setRoot(settingsStack);
-  } else {
-    HideLeftSideMenu();
-  }
+  Navigation.setRoot(settingsStack);
 };
 
 const settingsStack = {
