@@ -420,6 +420,7 @@ const TaskEditScreen = (props) => {
       ...(notificationDate && {notificationId: CreateNotification()}),
       notificationDate,
       saveToCalendar,
+      ...(saveToCalendar && {calendarEventId: CreateCalendarEvent()}),
     })
       .then((createdTask) => {
         setId(createdTask.id);
