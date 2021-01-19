@@ -108,12 +108,6 @@ const TaskEditScreen = (props) => {
             (category) => category.id === props.task.categoryId,
           ),
         );
-        console.log(
-          'cat find',
-          newCategories.find(
-            (category) => category.id === props.task.categoryId,
-          ),
-        );
       })
       .catch((error) => console.log(error));
     BackHandler.addEventListener('hardwareBackPress', OnPressBack);
