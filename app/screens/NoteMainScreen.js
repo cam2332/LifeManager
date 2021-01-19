@@ -69,21 +69,25 @@ const NoteMainScreen = (props) => {
   };
 
   const UpdateListFromSearch = (text) => {
-    NoteApi.GetNotesByTitleAndText(text)
-      .then((notes) => {
-        setNoteList(notes);
-        setIsFetching(false);
-      })
-      .catch(() => {
-        setNoteList([]);
-        setIsFetching(false);
-        snackBarRef.current.ShowSnackBar(
-          'Wystąpił błąd podczas ładowania notatek.',
-          4000,
-          '',
-          false,
-        );
-      });
+    if (text.length > 0) {
+      NoteApi.GetNotesByTitleAndText(text)
+        .then((notes) => {
+          setNoteList(notes);
+          setIsFetching(false);
+        })
+        .catch(() => {
+          setNoteList([]);
+          setIsFetching(false);
+          snackBarRef.current.ShowSnackBar(
+            'Wystąpił błąd podczas ładowania notatek.',
+            4000,
+            '',
+            false,
+          );
+        });
+    } else {
+      UpdateNoteList();
+    }
   };
 
   const OnChangeSearchText = (newValue) => {
