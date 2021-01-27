@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LifeManager</string>
+    <string name="configure">Wybierz notatkę</string>
+    <string name="done">Wykonane</string>
+    <string name="empty_view_text">Brak zadań</string>
+    <string name="favorite">Ulubione</string>
+    <string name="task_list_title">Zadania</string>
+</resources>

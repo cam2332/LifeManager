@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="default_primary_color">#0788D9</color>
+    <color name="task_list_item_background_color">#FAFAFA</color>
+    <color name="task_list_item_title">#4C4C4C</color>
+    <color name="task_list_item_done_title">#4D171717</color>
+    <color name="task_list_item_end_date">#808080</color>
+    <color name="task_list_item_end_date_expired">#D32F2F</color>
+    <color name="task_list_item_favorite_star">#F2A30F</color>
+    <color name="task_list_item_favorite_star_outline">#bfbfbf</color>
+</resources>

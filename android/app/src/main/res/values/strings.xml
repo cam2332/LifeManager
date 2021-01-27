@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">LifeManager</string>
+    <string name="note_widget_title" translatable="false">EXAMPLE</string>
+    <string name="note_widget_text" translatable="false">EXAMPLE</string>
+    <string name="configure">Select note</string>
+    <string name="default_primary_color" translatable="false">#0788D9</string>
+    <string name="done">Done</string>
+    <string name="favorite">Favorite</string>
+    <string name="empty_view_text">No tasks</string>
+    <string name="task_list_title">Tasks</string>
 </resources>
